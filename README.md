@@ -1,8 +1,14 @@
-# Index — Personal Developer Portfolio
+# Calap — Personal Developer Portfolio
 
-A production-ready personal portfolio built with **Next.js 15 (App Router)**, **TypeScript**, **Tailwind CSS**, **shadcn/ui** primitives, **Prisma**, and **PostgreSQL** (SQLite for local dev).
+> **Live:** https://portfolio-six-topaz-evd842wqk8.vercel.app
+>
+> **GitHub:** https://github.com/calap0309/portfolio
+
+Calap's personal developer portfolio — a production-ready app built with **Next.js 15 (App Router)**, **TypeScript**, **Tailwind CSS**, **shadcn/ui** primitives, **Prisma**, and **PostgreSQL** (managed via Neon on Vercel).
 
 Ground-up brutalist design system: off-white `#fafaf8`, near-black `#18181b`, and a single terracotta accent `#c9694b`. No purple gradients, no glassmorphism, no generic fade-in-up reveals.
+
+The site is deployed to **Vercel** with a **Neon Postgres** database. Project data and the admin user are managed entirely through the app's admin dashboard — no code changes needed to edit content after first setup.
 
 ## Tech Stack
 
@@ -13,7 +19,7 @@ Ground-up brutalist design system: off-white `#fafaf8`, near-black `#18181b`, an
 | Styling    | Tailwind CSS 3 + custom Swiss grid       |
 | UI         | Radix primitives (shadcn/ui)             |
 | Auth       | NextAuth (Credentials + JWT)             |
-| DB / ORM   | PostgreSQL + Prisma (SQLite fallback)    |
+| DB / ORM   | PostgreSQL + Prisma (Neon, production)   |
 | Email      | Resend (Nodemailer fallback)             |
 | Validation | Zod                                     |
 | Forms      | react-hook-form                         |
@@ -88,7 +94,7 @@ openssl rand -base64 32
 Edit `.env`:
 
 ```env
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/neondb?sslmode=require"
 NEXTAUTH_SECRET="<generated-secret>"
 NEXTAUTH_URL="http://localhost:3000"
 
@@ -99,17 +105,23 @@ SMTP_HOST="smtp.example.com"              # Only if no Resend key
 SMTP_PORT="587"
 SMTP_USER="you@example.com"
 SMTP_PASS="your-smtp-password"
-SMTP_FROM="Portfolio <portfolio@example.com>"
+SMTP_FROM="Calap <portfolio@example.com>"
 ```
 
-### 3. Set up the database (SQLite, local dev)
+### 3. Set up the database
+
+The production app uses **PostgreSQL** (via [Neon](https://neon.tech)). Point `DATABASE_URL` at any Postgres connection string.
+
+> **Local dev with SQLite (optional):** if you don't want a Postgres instance locally, change `datasource db { provider = "postgresql" }` back to `provider = "sqlite"` in `prisma/schema.prisma` and set `DATABASE_URL="file:./dev.db"`.
+
+With your `DATABASE_URL` set, create the tables and seed the data:
 
 ```bash
 npm run db:push
 npm run db:seed
 ```
 
-For **PostgreSQL in production**, change `datasource db { provider = "sqlite" }` in `prisma/schema.prisma` to `provider = "postgresql"` and set `DATABASE_URL` to your Postgres connection string. Then:
+For a managed migration instead of `db:push`, use:
 
 ```bash
 npx prisma migrate dev --name init
@@ -126,7 +138,8 @@ Open http://localhost:3000
 
 ## Admin
 
-- Login: http://localhost:3000/admin
+- Local login: http://localhost:3000/admin
+- **Production login:** https://portfolio-six-topaz-evd842wqk8.vercel.app/admin
 - Default credentials (from seed): `admin@portfolio.dev` / `admin123`
 
 **Change the password immediately** after first login (`prisma/user.update` or re-seed after editing the seed hash).
