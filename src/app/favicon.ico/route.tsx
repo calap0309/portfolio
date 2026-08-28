@@ -1,16 +1,15 @@
 import { ImageResponse } from "next/og";
 
 /**
- * Dynamically generated favicon (Section V) — a sharp, minimalist geometric
- * mark: a diagonal terracotta slash intersecting a near-black circle on
- * off-white. Rendered via Next.js' ImageResponse so it stays crisp in both
+ * Dynamically generated favicon (Section V) — an Apple-style minimalist
+ * monogram: the letter "C" in SF Pro Display, bold, #1d1d1f, on a clean
+ * white tile. Rendered via Next.js ImageResponse so it stays crisp in both
  * dark and light browser tabs.
  */
 export function GET() {
   const size = { width: 32, height: 32 };
-  const ink = "#18181b";
-  const paper = "#fafaf8";
-  const accent = "#c9694b";
+  const ink = "#1d1d1f";
+  const white = "#ffffff";
 
   return new ImageResponse(
     (
@@ -18,36 +17,24 @@ export function GET() {
         style={{
           width: "100%",
           height: "100%",
-          background: paper,
+          background: white,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 28 28"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          style={{
+            fontSize: 26,
+            fontWeight: 700,
+            color: ink,
+            fontFamily:
+              "-apple-system, BlinkMacSystemFont, 'SF Pro Display', Helvetica, Arial, sans-serif",
+            lineHeight: 1,
+          }}
         >
-          <circle
-            cx="14"
-            cy="14"
-            r="12"
-            stroke={ink}
-            strokeWidth="2"
-            fill="none"
-          />
-          <line
-            x1="6"
-            y1="22"
-            x2="22"
-            y2="6"
-            stroke={accent}
-            strokeWidth="3.5"
-            strokeLinecap="square"
-          />
-        </svg>
+          C
+        </div>
       </div>
     ),
     {

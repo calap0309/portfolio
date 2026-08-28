@@ -46,7 +46,7 @@ export function LoginForm() {
       <div>
         <label
           htmlFor="email"
-          className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+          className="mb-2 block text-sm font-semibold text-ink"
         >
           Email
         </label>
@@ -59,16 +59,14 @@ export function LoginForm() {
           autoFocus
         />
         {errors.email && (
-          <p className="mt-1 font-mono text-xs text-terracotta">
-            {errors.email.message}
-          </p>
+          <p className="mt-1 text-xs text-danger">{errors.email.message}</p>
         )}
       </div>
 
       <div>
         <label
           htmlFor="password"
-          className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+          className="mb-2 block text-sm font-semibold text-ink"
         >
           Password
         </label>
@@ -80,14 +78,12 @@ export function LoginForm() {
           autoComplete="current-password"
         />
         {errors.password && (
-          <p className="mt-1 font-mono text-xs text-terracotta">
-            {errors.password.message}
-          </p>
+          <p className="mt-1 text-xs text-danger">{errors.password.message}</p>
         )}
       </div>
 
       {error && (
-        <p className="border border-terracotta px-4 py-2 font-mono text-sm text-terracotta">
+        <p className="rounded-xl bg-[#f5f5f7] px-4 py-2 text-sm text-danger">
           {error}
         </p>
       )}
@@ -95,7 +91,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="btn btn-primary justify-center w-full disabled:opacity-50"
+        className="btn w-full justify-center disabled:opacity-50"
       >
         {isSubmitting ? "Signing in…" : "Sign in"}
       </button>

@@ -24,17 +24,17 @@ export default async function ProjectsPage() {
   return (
     <>
       <Nav />
-      <main className="py-16 md:py-20">
+      <main className="mx-auto max-w-grid py-16 md:py-24">
         <div className="row">
           <div className="col-span-12 md:col-span-10 md:col-start-2">
-            <p className="font-mono text-sm uppercase tracking-[0.2em] text-terracotta">
+            <p className="text-[1.0625rem] font-semibold text-subtext">
               Work
             </p>
-            <h1 className="mt-4 font-mono text-4xl tracking-tight md:text-5xl">
-              Public index of projects.
+            <h1 className="mt-3 text-[clamp(2rem,5vw,4rem)] font-bold tracking-tight2">
+              A curated index of what I&apos;ve shipped.
             </h1>
-            <p className="mt-4 max-w-lg text-base text-nearblack/70">
-              Tools, libraries, and infrastructure I designed and shipped. Each
+            <p className="mt-5 max-w-lg text-subtext">
+              Tools, libraries, and infrastructure I designed and built. Each
               entry is a production system, not a tutorial follow-along. Drag,
               swipe, or use the arrow keys to move through them.
             </p>
@@ -43,7 +43,7 @@ export default async function ProjectsPage() {
 
         <div className="mt-12 md:mt-16">
           {projects.length === 0 ? (
-            <div className="border border-dashed border-nearblack/40 p-12 text-center font-mono text-sm text-nearblack/50">
+            <div className="rounded-2xl hairline bg-[#f5f5f7] p-14 text-center text-subtext">
               No projects published yet.
             </div>
           ) : (

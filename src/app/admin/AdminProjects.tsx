@@ -178,12 +178,12 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
   return (
     <section className="mt-10">
       <div className="flex items-center justify-between">
-        <h2 className="font-mono text-xl uppercase tracking-wide">
+        <h2 className="text-xl font-bold tracking-tight2">
           Projects ({projects.length})
         </h2>
         <button
           onClick={openCreate}
-          className="btn btn-primary w-full sm:w-auto"
+          className="btn w-full sm:w-auto"
           type="button"
         >
           + New project
@@ -191,28 +191,29 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
       </div>
 
       {error && (
-        <div className="mt-4 border border-terracotta px-4 py-2 font-mono text-sm text-terracotta">
+        <div className="mt-4 rounded-xl bg-[#f5f5f7] px-4 py-2 text-sm text-danger">
           {error}
         </div>
       )}
 
-      <div className="mt-6 overflow-x-auto border border-nearblack">
+      {/* Table: horizontal overflow on mobile, hairline borders. */}
+      <div className="mt-6 overflow-x-auto rounded-2xl hairline bg-white shadow-card">
         <table className="w-full border-collapse text-left text-sm">
           <thead>
-            <tr className="border-b border-nearblack">
-              <th className="px-4 py-3 font-mono text-xs uppercase tracking-wide">
+            <tr className="hairline-b bg-[#fafafa]">
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-subtext">
                 Title
               </th>
-              <th className="px-4 py-3 font-mono text-xs uppercase tracking-wide">
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-subtext">
                 Slug
               </th>
-              <th className="hidden px-4 py-3 font-mono text-xs uppercase tracking-wide md:table-cell">
+              <th className="hidden px-4 py-3 text-xs font-semibold uppercase tracking-wide text-subtext md:table-cell">
                 Tags
               </th>
-              <th className="hidden px-4 py-3 font-mono text-xs uppercase tracking-wide md:table-cell">
+              <th className="hidden px-4 py-3 text-xs font-semibold uppercase tracking-wide text-subtext md:table-cell">
                 Featured
               </th>
-              <th className="px-4 py-3 font-mono text-xs uppercase tracking-wide">
+              <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-subtext">
                 Actions
               </th>
             </tr>
@@ -220,7 +221,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
           <tbody>
             {projects.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-12 text-center text-nearblack/50">
+                <td colSpan={5} className="px-4 py-12 text-center text-subtext">
                   No projects yet. Create one to get started.
                 </td>
               </tr>
@@ -228,38 +229,36 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
               projects.map((project) => (
                 <tr
                   key={project.id}
-                  className="border-b border-nearblack/20 last:border-0"
+                  className="hairline-b last:border-0"
                 >
-                  <td className="px-4 py-3 font-medium">{project.title}</td>
-                  <td className="px-4 py-3 font-mono text-xs text-nearblack/60">
-                    {project.slug}
-                  </td>
+                  <td className="px-4 py-3 font-medium text-ink">{project.title}</td>
+                  <td className="px-4 py-3 text-xs text-subtext">{project.slug}</td>
                   <td className="hidden px-4 py-3 md:table-cell">
-                    <span className="max-w-[16rem] truncate block font-mono text-xs text-nearblack/60">
+                    <span className="block max-w-[16rem] truncate text-xs text-subtext">
                       {parseTags(project.tags).join(", ")}
                     </span>
                   </td>
                   <td className="hidden px-4 py-3 md:table-cell">
                     {project.featured ? (
-                      <span className="bg-ochre px-2 py-0.5 font-mono text-xs uppercase">
+                      <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-medium text-white">
                         Featured
                       </span>
                     ) : (
-                      <span className="text-nearblack/40">—</span>
+                      <span className="text-subtext/50">—</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex gap-3">
+                    <div className="flex gap-4">
                       <button
                         onClick={() => openEdit(project)}
-                        className="text-sm link-hover inline-flex min-h-[2.75rem] items-center"
+                        className="inline-flex min-h-[2.75rem] items-center text-sm font-semibold text-accent transition-colors hover:text-accent-hover"
                         type="button"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(project.id)}
-                        className="text-sm text-terracotta link-hover inline-flex min-h-[2.75rem] items-center"
+                        className="inline-flex min-h-[2.75rem] items-center text-sm font-semibold text-danger transition-colors"
                         type="button"
                       >
                         Delete
@@ -278,9 +277,9 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
         onOpenChange={(open) => !open && setEditor(null)}
       >
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-40 bg-nearblack/50" />
-          <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto border-4 border-nearblack bg-offwhite p-6 md:p-8">
-            <Dialog.Title className="font-mono text-2xl">
+          <Dialog.Overlay className="fixed inset-0 z-40 bg-black/20 backdrop-blur-md" />
+          <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl bg-white p-6 shadow-xl md:p-8">
+            <Dialog.Title className="text-2xl font-bold tracking-tight2">
               {editor?.mode === "edit" ? "Edit project" : "New project"}
             </Dialog.Title>
 
@@ -292,7 +291,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                 <div>
                   <label
                     htmlFor="title"
-                    className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+                    className="mb-2 block text-sm font-semibold text-ink"
                   >
                     Title
                   </label>
@@ -305,7 +304,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                     autoFocus
                   />
                   {errors.title && (
-                    <p className="mt-1 font-mono text-xs text-terracotta">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.title.message}
                     </p>
                   )}
@@ -314,7 +313,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                 <div>
                   <label
                     htmlFor="slug"
-                    className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+                    className="mb-2 block text-sm font-semibold text-ink"
                   >
                     Slug
                   </label>
@@ -325,7 +324,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                     className="input-field"
                   />
                   {errors.slug && (
-                    <p className="mt-1 font-mono text-xs text-terracotta">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.slug.message}
                     </p>
                   )}
@@ -335,7 +334,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
               <div>
                 <label
                   htmlFor="description"
-                  className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+                  className="mb-2 block text-sm font-semibold text-ink"
                 >
                   Description
                 </label>
@@ -346,7 +345,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                   className="input-field resize-y"
                 />
                 {errors.description && (
-                  <p className="mt-1 font-mono text-xs text-terracotta">
+                  <p className="mt-1 text-xs text-danger">
                     {errors.description.message}
                   </p>
                 )}
@@ -356,7 +355,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                 <div>
                   <label
                     htmlFor="coverImage"
-                    className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+                    className="mb-2 block text-sm font-semibold text-ink"
                   >
                     Cover image URL
                   </label>
@@ -367,7 +366,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                     className="input-field"
                   />
                   {errors.coverImage && (
-                    <p className="mt-1 font-mono text-xs text-terracotta">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.coverImage.message}
                     </p>
                   )}
@@ -376,7 +375,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                 <div>
                   <label
                     htmlFor="tags"
-                    className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+                    className="mb-2 block text-sm font-semibold text-ink"
                   >
                     Tags (comma separated)
                   </label>
@@ -398,7 +397,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                 <div>
                   <label
                     htmlFor="liveUrl"
-                    className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+                    className="mb-2 block text-sm font-semibold text-ink"
                   >
                     Live URL
                   </label>
@@ -409,7 +408,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                     className="input-field"
                   />
                   {errors.liveUrl && (
-                    <p className="mt-1 font-mono text-xs text-terracotta">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.liveUrl.message}
                     </p>
                   )}
@@ -418,7 +417,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                 <div>
                   <label
                     htmlFor="githubUrl"
-                    className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+                    className="mb-2 block text-sm font-semibold text-ink"
                   >
                     GitHub URL
                   </label>
@@ -429,14 +428,14 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                     className="input-field"
                   />
                   {errors.githubUrl && (
-                    <p className="mt-1 font-mono text-xs text-terracotta">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.githubUrl.message}
                     </p>
                   )}
                 </div>
               </div>
 
-              <label className="flex items-center gap-3 font-mono text-sm">
+              <label className="flex items-center gap-3 text-sm font-medium text-ink">
                 <input
                   type="checkbox"
                   checked={featuredValue}
@@ -445,7 +444,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                       shouldValidate: true,
                     })
                   }
-                  className="h-4 w-4 accent-terracotta"
+                  className="h-5 w-5 accent-accent"
                 />
                 Featured on homepage
               </label>
@@ -453,7 +452,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
               <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
                 <button
                   onClick={() => setEditor(null)}
-                  className="btn btn-outline w-full sm:w-auto"
+                  className="btn btn-ghost w-full sm:w-auto"
                   type="button"
                 >
                   Cancel
@@ -461,7 +460,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn btn-primary w-full sm:w-auto disabled:opacity-50"
+                  className="btn w-full sm:w-auto disabled:opacity-50"
                 >
                   {submitting
                     ? editor?.mode === "edit"

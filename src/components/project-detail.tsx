@@ -5,21 +5,19 @@ export function ProjectDetail({ project }: { project: Project }) {
   const tags = parseTags(project.tags);
 
   return (
-    <article className="border border-nearblack bg-offwhite p-6">
-      <div className="border-b border-nearblack/20 pb-4">
-        <h2 className="font-mono text-2xl">{project.title}</h2>
-        <span className="mt-1 block font-mono text-xs text-nearblack/50">
+    <article className="rounded-2xl hairline bg-white p-6 shadow-card">
+      <div className="hairline-b pb-4">
+        <h2 className="text-2xl font-bold tracking-tight2">{project.title}</h2>
+        <span className="mt-1 block text-xs font-normal uppercase tracking-wide text-subtext">
           {project.slug}
         </span>
       </div>
-      <p className="mt-4 text-sm leading-relaxed text-nearblack/80">
-        {project.description}
-      </p>
+      <p className="mt-4 text-subtext">{project.description}</p>
       <div className="mt-4 flex flex-wrap gap-2">
         {tags.map((tag) => (
           <span
             key={tag}
-            className="border border-nearblack/40 px-2 py-0.5 font-mono text-[0.64rem] uppercase tracking-wider text-nearblack/70"
+            className="rounded-full hairline bg-[#f5f5f7] px-3 py-1 text-xs font-medium text-subtext"
           >
             {tag}
           </span>

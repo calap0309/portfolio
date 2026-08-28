@@ -3,10 +3,13 @@ import { ImageResponse } from "next/og";
 export const size = { width: 64, height: 64 };
 export const contentType = "image/png";
 
+/**
+ * Apple-style PNG icon (Section V): minimalist "C" monogram, bold, #1d1d1f,
+ * on pure white. Crisp in both light and dark browser tabs.
+ */
 export default function Icon(): ImageResponse {
-  const accent = "#c9694b";
-  const ink = "#18181b";
-  const paper = "#fafaf8";
+  const ink = "#1d1d1f";
+  const white = "#ffffff";
 
   return new ImageResponse(
     (
@@ -14,38 +17,24 @@ export default function Icon(): ImageResponse {
         style={{
           width: "100%",
           height: "100%",
-          background: paper,
+          background: white,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          position: "relative",
         }}
       >
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 48 48"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          style={{
+            fontSize: 54,
+            fontWeight: 700,
+            color: ink,
+            fontFamily:
+              "-apple-system, BlinkMacSystemFont, 'SF Pro Display', Helvetica, Arial, sans-serif",
+            lineHeight: 1,
+          }}
         >
-          <circle
-            cx="24"
-            cy="24"
-            r="20"
-            stroke={ink}
-            strokeWidth="3"
-            fill="none"
-          />
-          <line
-            x1="10"
-            y1="38"
-            x2="38"
-            y2="10"
-            stroke={accent}
-            strokeWidth="5"
-            strokeLinecap="square"
-          />
-          <circle cx="24" cy="24" r="4" fill={ink} />
-        </svg>
+          C
+        </div>
       </div>
     ),
     { ...size }

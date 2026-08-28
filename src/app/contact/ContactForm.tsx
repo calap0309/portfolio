@@ -6,10 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 const contactSchema = z.object({
-  name: z.string().min(2, "Leave a real name."),
+  name: z.string().min(2, "Please enter your name."),
   email: z.string().email("That email won't deliver."),
-  subject: z.string().min(3, "Give it a subject."),
-  message: z.string().min(20, "Say more than a sentence."),
+  subject: z.string().min(3, "Please add a subject."),
+  message: z.string().min(20, "Please say a little more."),
 });
 
 type ContactFormValues = z.input<typeof contactSchema>;
@@ -49,11 +49,11 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-10 grid gap-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-10 grid gap-5">
       <div>
         <label
           htmlFor="name"
-          className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+          className="mb-2 block text-sm font-semibold text-ink"
         >
           Name
         </label>
@@ -65,16 +65,14 @@ export function ContactForm() {
           autoComplete="name"
         />
         {errors.name && (
-          <p className="mt-1 font-mono text-xs text-terracotta">
-            {errors.name.message}
-          </p>
+          <p className="mt-1 text-xs text-danger">{errors.name.message}</p>
         )}
       </div>
 
       <div>
         <label
           htmlFor="email"
-          className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+          className="mb-2 block text-sm font-semibold text-ink"
         >
           Email
         </label>
@@ -86,16 +84,14 @@ export function ContactForm() {
           autoComplete="email"
         />
         {errors.email && (
-          <p className="mt-1 font-mono text-xs text-terracotta">
-            {errors.email.message}
-          </p>
+          <p className="mt-1 text-xs text-danger">{errors.email.message}</p>
         )}
       </div>
 
       <div>
         <label
           htmlFor="subject"
-          className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+          className="mb-2 block text-sm font-semibold text-ink"
         >
           Subject
         </label>
@@ -106,16 +102,14 @@ export function ContactForm() {
           className="input-field"
         />
         {errors.subject && (
-          <p className="mt-1 font-mono text-xs text-terracotta">
-            {errors.subject.message}
-          </p>
+          <p className="mt-1 text-xs text-danger">{errors.subject.message}</p>
         )}
       </div>
 
       <div>
         <label
           htmlFor="message"
-          className="mb-2 block font-mono text-xs uppercase tracking-wide text-nearblack/70"
+          className="mb-2 block text-sm font-semibold text-ink"
         >
           Message
         </label>
@@ -126,9 +120,7 @@ export function ContactForm() {
           className="input-field resize-y"
         />
         {errors.message && (
-          <p className="mt-1 font-mono text-xs text-terracotta">
-            {errors.message.message}
-          </p>
+          <p className="mt-1 text-xs text-danger">{errors.message.message}</p>
         )}
       </div>
 
@@ -136,19 +128,19 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="btn btn-primary w-full sm:w-auto disabled:opacity-50"
+          className="btn w-full disabled:opacity-50 sm:w-auto"
         >
-          {status === "sending" ? "Transmitting…" : "Send message"}
+          {status === "sending" ? "Sending…" : "Send message"}
         </button>
 
         {status === "sent" && (
-          <p className="mt-4 border border-nearblack bg-ochre/30 px-4 py-2 font-mono text-sm">
-            Message sent. I&apos;ll reply within 24h.
+          <p className="mt-4 rounded-xl bg-[#f5f5f7] px-4 py-3 text-sm text-ink">
+            Message sent. I&apos;ll reply within 24 hours.
           </p>
         )}
         {status === "error" && (
-          <p className="mt-4 border border-terracotta px-4 py-2 font-mono text-sm text-terracotta">
-            Delivery failed. Email me directly instead.
+          <p className="mt-4 rounded-xl bg-[#f5f5f7] px-4 py-3 text-sm text-ink">
+            Delivery failed. Please email me directly instead.
           </p>
         )}
       </div>

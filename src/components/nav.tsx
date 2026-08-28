@@ -6,7 +6,7 @@ import { NavClient } from "./nav-client";
 /**
  * Server wrapper: resolves the auth session server-side and hands a plain
  * boolean down to the interactive client navigation so the auth check never
- * leaks into a client bundle. Desktop renders the hard-edged inline nav;
+ * leaks into a client bundle. Desktop renders the inline Apple-style nav;
  * mobile (<md) collapses it into a shadcn/ui Sheet drawer.
  */
 export async function Nav() {
@@ -14,19 +14,19 @@ export async function Nav() {
   const isAdmin = Boolean(session?.user);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-nearblack bg-offwhite">
-      <div className="row items-center py-4">
+    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl hairline-b">
+      <div className="row items-center py-3">
         <div className="col-span-6 md:col-span-3">
           <Link
             href="/"
-            className="inline-flex items-center font-mono text-lg font-bold tracking-tight link-hover"
+            className="inline-flex items-center text-[0.875rem] font-semibold tracking-tight2 text-ink"
           >
-            CALAP<span className="text-terracotta">.</span>
+            Calap
           </Link>
         </div>
 
         {/* Desktop nav — md and up */}
-        <nav className="col-span-6 md:col-span-9 hidden md:flex md:items-center md:justify-end md:gap-6">
+        <nav className="col-span-6 md:col-span-9 hidden md:flex md:items-center md:justify-end md:gap-8">
           <NavLinks isAdmin={isAdmin} />
         </nav>
 
@@ -40,7 +40,7 @@ export async function Nav() {
 }
 
 const links = [
-  { href: "/", label: "Index" },
+  { href: "/", label: "Home" },
   { href: "/projects", label: "Work" },
   { href: "/contact", label: "Contact" },
 ] as const;
@@ -48,11 +48,14 @@ const links = [
 function NavLinks({ isAdmin }: { isAdmin: boolean }) {
   return (
     <>
-      {links.map((link) => (
+      <Link href="/" className="text-[0.875rem] font-normal text-subtext transition-colors hover:text-ink">
+        Home
+      </Link>
+      {links.slice(1).map((link) => (
         <Link
           key={link.href}
           href={link.href}
-          className="text-sm uppercase tracking-wide link-hover"
+          className="text-[0.875rem] font-normal text-subtext transition-colors hover:text-ink"
         >
           {link.label}
         </Link>
@@ -60,7 +63,7 @@ function NavLinks({ isAdmin }: { isAdmin: boolean }) {
       {isAdmin && (
         <Link
           href="/admin"
-          className="text-sm uppercase tracking-wide link-hover text-terracotta"
+          className="text-[0.875rem] font-semibold text-accent transition-colors hover:text-accent-hover"
         >
           Admin
         </Link>

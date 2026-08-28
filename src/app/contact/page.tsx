@@ -13,29 +13,29 @@ export default function ContactPage() {
   return (
     <>
       <Nav />
-      <main className="py-20">
+      <main className="mx-auto max-w-text py-20">
         <div className="row">
-          <div className="col-span-12 md:col-span-7 md:col-start-3">
-            <p className="font-mono text-sm uppercase tracking-[0.2em] text-terracotta">
+          <div className="col-span-12 md:col-span-8 md:col-start-3">
+            <p className="text-[1.0625rem] font-semibold text-subtext">
               Contact
             </p>
-            <h1 className="mt-4 font-mono text-4xl md:text-5xl tracking-tight">
-              Let&apos;s talk infrastructure.
+            <h1 className="mt-3 text-[clamp(2rem,5vw,4rem)] font-bold tracking-tight2">
+              Let&apos;s build something.
             </h1>
-            <p className="mt-4 max-w-lg text-base text-nearblack/70">
-              Hiring for a systems-heavy role, or want to discuss a build?
-              Skip the form and the noise. One message, a direct reply.
+            <p className="mt-5 max-w-lg text-subtext">
+              Hiring for a systems-heavy role, or want to discuss a build? One
+              message, a direct reply.
             </p>
 
             <ContactForm />
 
-            <div className="mt-12 border-t border-nearblack pt-6">
-              <p className="font-mono text-xs uppercase tracking-wide text-nearblack/60">
+            <div className="mt-14 hairline-top pt-6">
+              <p className="text-xs font-semibold uppercase tracking-wide text-subtext">
                 Prefer email?
               </p>
               <a
                 href={`mailto:${process.env.CONTACT_EMAIL ?? "hello@example.com"}`}
-                className="link-hover font-mono text-lg"
+                className="mt-2 inline-flex text-lg font-semibold text-accent transition-colors hover:text-accent-hover"
               >
                 {process.env.CONTACT_EMAIL ?? "hello@example.com"}
               </a>

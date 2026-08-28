@@ -25,14 +25,17 @@ interface ProjectCarouselProps {
 }
 
 /**
- * Horizontal drag carousel.
+ * Horizontal drag carousel (Section III).
  *
  * A single framer-motion `x` MotionValue owns the track position. Native
  * `scrollLeft` mirrors it so the standard scrollbar stays visible and keyboard
  * + pagination maths share one source of truth. Drag uses `drag="x"`,
- * `dragConstraints`, `dragElastic={0.1}` and `dragMomentum`; on release the
- * nearest card snaps to the viewport centre. Cards-per-view, tap targets,
+ * `dragConstraints`, `dragElastic={0.1}`, `dragMomentum`; on release the
+ * nearest card eases to the viewport centre. Cards-per-view, tap targets,
  * arrow-key control, edge fades and dots are all handled here.
+ *
+ * Styled to Apple: hairline tiles with layered shadow, image scales to 1.02 on
+ * hover, and pagination dots are small gray circles with a blue active pill.
  */
 export function ProjectCarousel({ projects }: ProjectCarouselProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -153,7 +156,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
         aria-roledescription="carousel"
         aria-label="Project carousel"
         onKeyDown={handleKeyDown}
-        className="carousel-pan relative -mx-1 overflow-x-auto px-1 pb-2 outline-none focus-visible:outline-2 focus-visible:outline-terracotta"
+        className="carousel-pan relative -mx-1 overflow-x-auto px-1 pb-2 outline-none focus-visible:outline-2 focus-visible:outline-accent"
       >
         <motion.div
           className="flex"
@@ -179,11 +182,13 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
         </motion.div>
       </div>
 
-      {/* Edge fades — subtle, tap-through. Hidden below sm to not fight swipes. */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-12 bg-gradient-to-r from-paper-light to-transparent sm:block" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-12 bg-gradient-to-l from-paper-light to-transparent sm:block" />
+      {/* Edge fades — subtle, tap-through, white to keep the Apple look.
+          Hidden below sm to not fight swipes. */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-12 bg-gradient-to-r from-white to-transparent sm:block" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-12 bg-gradient-to-l from-white to-transparent sm:block" />
 
-      {/* Pagination dots — full 44px+ tap area, gap-2. */}
+      {/* Pagination dots — full 44px tap area, gap-2. Inactive dots are small
+          gray circles; the active dot is a blue pill (Apple-style). */}
       <div className="mt-6 flex items-center justify-center gap-2">
         {projects.map((project, i) => (
           <button
@@ -198,8 +203,8 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
             <span
               className={
                 i === activeIndex
-                  ? "h-2.5 w-8 bg-nearblack transition-colors duration-200"
-                  : "h-2.5 w-2.5 bg-nearblack/30 transition-colors duration-200 hover:bg-nearblack/60"
+                  ? "h-2 w-8 rounded-full bg-accent transition-colors duration-200"
+                  : "h-2 w-2 rounded-full bg-[#c7c7cc] transition-colors duration-200 hover:bg-[#aeaeb2]"
               }
             />
           </button>
@@ -232,53 +237,51 @@ function Slide({
   const opacity = useTransform(x, (v) => {
     const dist = Math.abs(v - slideX);
     const fade = Math.max(0, 1 - dist / (cardWidth * 2));
-    return 0.5 + fade * 0.5;
+    return 0.55 + fade * 0.45;
   });
 
   return (
     <div className="shrink-0 pr-6" style={{ width: width || "76vw" }}>
       <motion.article
         style={{ opacity }}
-        className="will-change-transform border border-nearblack bg-offwhite"
+        className="will-change-transform flex flex-col overflow-hidden rounded-2xl hairline bg-white shadow-card transition-shadow duration-300 ease-apple hover:shadow-card-hover"
       >
-        <div className="relative aspect-[16/10] overflow-hidden border-b border-nearblack">
+        <div className="group relative aspect-[16/10] overflow-hidden bg-[#f5f5f7]">
           {project.coverImage && (
             <Image
               src={project.coverImage}
               alt={project.title}
               fill
               sizes="(max-width: 639px) 80vw, (max-width: 1023px) 45vw, 32vw"
-              className="object-cover"
+              className="object-cover transition-transform duration-300 ease-apple group-hover:scale-[1.02]"
             />
           )}
         </div>
-        <div className="flex flex-col gap-4 p-5">
+        <div className="flex flex-col gap-3 p-6">
           <div className="flex items-start justify-between gap-4">
-            <h3 className="font-mono text-lg leading-tight">{project.title}</h3>
-            <span className="shrink-0 font-mono text-xs text-nearblack/60">
+            <h3 className="text-xl font-bold tracking-tight2">{project.title}</h3>
+            <span className="shrink-0 text-xs font-normal uppercase tracking-wide text-subtext">
               {project.slug}
             </span>
           </div>
-          <p className="text-sm leading-relaxed text-nearblack/80">
-            {project.description}
-          </p>
-          <div className="mt-auto flex flex-wrap gap-2 pt-2">
+          <p className="text-subtext">{project.description}</p>
+          <div className="mt-auto flex flex-wrap gap-2 pt-4">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="border border-nearblack/40 px-2 py-0.5 font-mono text-[0.64rem] uppercase tracking-wider text-nearblack/70"
+                className="rounded-full hairline bg-[#f5f5f7] px-3 py-1 text-xs font-medium text-subtext"
               >
                 {tag}
               </span>
             ))}
           </div>
-          <div className="flex items-center gap-4 pt-2">
+          <div className="flex items-center gap-6 pt-2">
             {project.liveUrl && (
               <Link
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm font-medium underline-offset-4 decoration-terracotta link-hover"
+                className="inline-flex min-h-[2.75rem] items-center gap-1 text-[0.875rem] font-semibold text-accent transition-colors hover:text-accent-hover"
               >
                 Visit <ArrowUpRight className="h-4 w-4" />
               </Link>
@@ -288,7 +291,7 @@ function Slide({
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-nearblack/60 link-hover"
+                className="inline-flex min-h-[2.75rem] items-center gap-1 text-[0.875rem] font-semibold text-accent transition-colors hover:text-accent-hover"
               >
                 <Github className="h-4 w-4" /> Source
               </Link>

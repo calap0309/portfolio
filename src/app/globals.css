@@ -4,155 +4,141 @@
 
 @layer base {
   :root {
-    --offwhite: #fafaf8;
-    --nearblack: #18181b;
-    --terracotta: #c9694b;
-    --ochre: #d4a373;
-    --paper: #f7f4f0;
-    --paper-light: #fdfcfa;
-    --paper-dark: #efece6;
-    --grain: #2d2a24;
-  }
-
-  * {
-    border-radius: 0;
+    --appbg: #ffffff;
+    --ink: #1d1d1f;
+    --subtext: #86868b;
+    --accent: #0071e3;
+    --accent-hover: #0077ed;
+    --hairline: #d2d2d7;
+    --heroglow: #f5f5f7;
   }
 
   html {
     scroll-behavior: smooth;
   }
 
+  /* Prevent any horizontal scroll from carousel edges, blobs, or grid. */
   html,
   body {
-    /* Prevent any horizontal scroll from carousel edges, blobs, or grid. */
     overflow-x: hidden;
   }
 
   body {
-    /* Refined paper base: a soft warm light source near the top centre that
-       falls off gradually through the paper tone into a slightly darker edge —
-       reads as a sheet of warm paper under soft ambient light, not a flat or
-       glitzy gradient. */
-    background-color: var(--paper);
-    background-image: radial-gradient(
-      ellipse 120% 80% at 50% 18%,
-      #fffefb 0%,
-      var(--paper-light) 24%,
-      var(--paper) 56%,
-      var(--paper-dark) 100%
-    );
-    background-repeat: no-repeat;
-    min-height: 100vh;
-    color: var(--nearblack);
+    /* Apple uses true white as the base. */
+    background-color: var(--appbg);
+    color: var(--ink);
     font-family: theme("fontFamily.sans");
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* ---- Film-grain / handmade-paper texture via pseudo-element ---- */
-  /* Two-scale inline SVG feTurbulence fractal noise (a broad grain plus a fine
-     speckle), blended at low opacity via multiply for a tactile, offset-print
-     feel. Using position:fixed pseudos avoids repaints and keeps the effect
-     (not the whole page) cheap. */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.05; /* 5% on desktop */
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.7' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 128px 128px, 96px 96px;
-  }
-
-  /* ---- Subtle "printed sheet" vignette ---- */
-  /* A very soft darkening at the viewport edges to give the page depth, like
-     the edges of a sheet held away from a light source. Deliberately faint. */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: radial-gradient(
-      ellipse 120% 120% at 50% 50%,
-      transparent 58%,
-      rgba(24, 24, 27, 0.06) 100%
-    );
+    text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    background-color: var(--terracotta);
-    color: var(--offwhite);
+    background-color: var(--accent);
+    color: #ffffff;
   }
 
   h1,
   h2,
   h3,
-  h4,
-  h5,
-  h6 {
-    font-family: theme("fontFamily.mono");
+  h4 {
     font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
-  /* Responsive, fluid type using clamp(). Body stays >= 16px on mobile to
-     prevent iOS auto-zoom. */
+  h5,
+  h6 {
+    font-weight: 600;
+  }
+
+  /* Responsive fluid type using clamp(). Body stays >= 16px on mobile to
+     prevent iOS auto-zoom (Apple HIG). 1.0625rem final with Apple's 1.47059
+     line-height ratio. */
   body,
-  p,
-  li {
+  p {
     font-size: clamp(1rem, 1rem + 0.2vw, 1.0625rem);
+    line-height: 1.47059;
   }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center px-5 py-3 text-sm font-medium transition-transform duration-150 ease-out;
-    /* Minimum 44px tap target (Apple HIG) + 44px tall (WCAG 2.1). */
+    @apply inline-flex items-center justify-center rounded-full bg-accent px-6 text-[0.875rem] font-semibold text-white transition-all duration-200 ease-apple;
+    /* Minimum 44px tap target (Apple HIG). */
     min-height: 2.75rem;
   }
 
-  .btn:active {
-    transform: scale(0.95);
+  .btn:hover:not(:disabled) {
+    background-color: var(--accent-hover);
+    transform: scale(1.02);
+    box-shadow: theme("boxShadow.cta");
   }
 
-  .btn-primary {
-    @apply bg-nearblack text-offwhite hover:bg-terracotta;
+  .btn:active:not(:disabled) {
+    transform: scale(0.98);
   }
 
-  .btn-outline {
-    @apply border-2 border-nearblack bg-transparent text-nearblack hover:bg-ochre/30;
+  .btn-secondary {
+    @apply bg-transparent text-accent hover:bg-transparent hover:text-accent;
   }
 
-  .link-hover {
-    @apply relative transition-colors duration-200;
-    /* Expand the invisible hit area of inline links to a 44px target. */
+  .btn-secondary:hover:not(:disabled) {
+    box-shadow: none;
+    text-decoration: underline;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-ink hover:bg-[#f5f5f7] hover:text-ink;
+    border-width: 0.5px;
+    border-style: solid;
+    border-color: var(--hairline);
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    box-shadow: none;
+    transform: scale(1.01);
+  }
+
+  /* Inline text link in Apple blue. Expanded hit area to reach 44px. */
+  .link {
+    @apply text-accent transition-colors duration-200 hover:no-underline;
     padding-block: 0.5rem;
     line-height: 1.25rem;
   }
 
-  .link-hover:hover {
-    color: var(--terracotta);
+  .link-secondary {
+    @apply text-accent no-underline;
+  }
+
+  .hairline-top {
+    border-top: 0.5px solid var(--hairline);
+  }
+
+  .hairline-b {
+    border-bottom: 0.5px solid var(--hairline);
+  }
+
+  /* 0.5px hairline around the whole element (Apple signature thin border).
+     Tailwind's JIT won't emit `border-[0.5px]` (leading-zero fraction), so we
+     provide it as a component class. Pair with border-radius as needed. */
+  .hairline {
+    border-width: 0.5px;
+    border-style: solid;
+    border-color: var(--hairline);
   }
 
   .input-field {
-    @apply w-full bg-transparent border-b-2 border-nearblack/30 px-3 py-2 text-sm focus:outline-none transition-shadow duration-200;
-    min-height: 2.75rem; /* 44px tap target for form inputs */
+    @apply w-full rounded-xl border border-[#d2d2d7] bg-transparent px-4 text-[1rem] text-ink transition-colors duration-200 placeholder:text-subtext/70;
+    min-height: 2.75rem; /* 44px tap target */
   }
 
-  .input-field:focus {
-    border-color: var(--terracotta);
-    /* Border-glow on focus: a soft halo that respects the brutalist no-radii
-       language while still signalling focus. */
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--terracotta) 25%, transparent);
-    outline: none;
-  }
-
+  /* Micro-interaction: a blue border glow on focus — a color shift, not a
+     big animation (Section II). */
+  .input-field:focus,
   .input-field:focus-visible {
-    outline: 2px solid var(--terracotta);
-    outline-offset: 2px;
+    border-color: var(--accent);
+    outline: 3px solid color-mix(in srgb, var(--accent) 20%, transparent);
+    outline-offset: 0;
   }
 
   /* Carousel container: lock horizontal touch panning to the carousel only,
@@ -195,26 +181,6 @@
   }
 }
 
-/* ---- Mobile background performance (Section VI) ---- */
-/* Drive blob blur from CSS variables so it can be halved on touch/coarse
-   pointers. Defaults are desktop values; the coarse-pointer media query below
-   replaces them with 50% values (120px -> 60px, 160px -> 80px) to save GPU. */
-:root {
-  --blob-blur-top: 120px;
-  --blob-blur-bottom: 160px;
-}
-
-/* Reduce grain opacity to 2% and halve blob blur on touch/coarse screens. */
-@media (hover: none), (pointer: coarse) {
-  :root {
-    --blob-blur-top: 60px;
-    --blob-blur-bottom: 80px;
-  }
-  body::before {
-    opacity: 0.02;
-  }
-}
-
 /* ---- Safe-area insets for notched devices (Section VI) ---- */
 @supports (padding: env(safe-area-inset-top)) {
   @media (min-width: 1px) {
@@ -233,22 +199,30 @@
   }
 }
 
-/* Keep focus visible but subtle everywhere without relying on reveal on scroll */
-*:focus {
-  outline: none;
+/* ---- Mobile background performance: halve blob blur on touch ---- */
+:root {
+  --blob-blur-desk: 150px;
+  --blob-blur-mob: 75px;
 }
+
+body {
+  --blob-blur: var(--blob-blur-desk);
+}
+
+@media (hover: none), (pointer: coarse) {
+  body {
+    --blob-blur: var(--blob-blur-mob);
+  }
+}
+
+/* Keep focus visible but subtle everywhere. */
 *:focus-visible {
-  outline: 2px solid var(--terracotta);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-/* Respect users who asked for reduced motion: our only allowed motion is
-   the blobs parallax, which we neutralise here. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-  .bg-blob {
-    transform: none !important;
   }
 }

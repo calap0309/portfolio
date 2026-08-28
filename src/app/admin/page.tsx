@@ -27,24 +27,24 @@ export default async function AdminPage() {
   const email = session.user.email ?? "admin";
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-6 py-16 md:px-10">
-      <div className="flex items-end justify-between border-b border-nearblack pb-6">
+    <main className="mx-auto w-full max-w-6xl py-12 md:py-20">
+      <div className="flex items-end justify-between hairline-b pb-6">
         <div>
-          <p className="font-mono text-sm uppercase tracking-[0.2em] text-terracotta">
-            Admin
-          </p>
-          <h1 className="mt-2 font-mono text-3xl md:text-4xl">Dashboard</h1>
+          <p className="text-[1.0625rem] font-semibold text-subtext">Admin</p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight2 md:text-4xl">
+            Dashboard
+          </h1>
         </div>
         <Link
           href="/api/auth/signout"
-          className="text-sm uppercase tracking-wide link-hover"
+          className="inline-flex min-h-[2.75rem] items-center text-[0.875rem] font-semibold text-accent transition-colors hover:text-accent-hover"
         >
           Sign out
         </Link>
       </div>
 
-      <p className="mt-4 font-mono text-sm text-nearblack/60">
-        Signed in as <span className="text-nearblack">{email}</span>
+      <p className="mt-4 text-sm text-subtext">
+        Signed in as <span className="font-medium text-ink">{email}</span>
       </p>
 
       {/* Stats — wrap to 1 column on mobile. */}
@@ -72,11 +72,11 @@ export default async function AdminPage() {
 
 function Stat({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="flex flex-col gap-1 border border-nearblack bg-offwhite p-5">
-      <span className="font-mono text-xs uppercase tracking-wide text-nearblack/60">
+    <div className="flex flex-col gap-1 rounded-2xl hairline bg-white p-5 shadow-card">
+      <span className="text-xs font-semibold uppercase tracking-wide text-subtext">
         {label}
       </span>
-      <span className="font-mono text-2xl leading-none">{value}</span>
+      <span className="text-2xl font-bold leading-none text-ink">{value}</span>
     </div>
   );
 }

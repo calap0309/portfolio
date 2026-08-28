@@ -6,9 +6,9 @@
 
 Calap's personal developer portfolio — a production-ready app built with **Next.js 15 (App Router)**, **TypeScript (strict, zero `any`)**, **Tailwind CSS**, **shadcn/ui** primitives, **Prisma**, and **PostgreSQL** (with an easy **SQLite** fallback for local dev).
 
-Ground-up Swiss-inspired design system: off-white `#fafaf8` paper base `#f7f4f0`, near-black `#18181b`, a single terracotta accent `#c9694b`, and an ochre `#d4a373` secondary. **No purple gradients, no glassmorphism, no fade-in-up reveals.**
+The design is **Apple-inspired**: clean, typography-driven, spacious, and minimal. Pure white base, near-black ink `#1d1d1f`, Apple blue `#0071e3`, medium gray `#86868b` secondary text, and `#d2d2d7` 0.5px hairlines — emulating the apple.com aesthetic. **No gradients (except subtle hero glows), no glassmorphism, no particle effects, no dark mode by default.**
 
-The site is deployed to **Vercel** with a **Neon Postgres** database. Project data and the admin user are managed entirely through the app's admin dashboard.
+Deployed to **Vercel** with a **Neon Postgres** database. Project data and the admin user are managed entirely through the app's admin dashboard.
 
 ## Tech Stack
 
@@ -16,9 +16,9 @@ The site is deployed to **Vercel** with a **Neon Postgres** database. Project da
 | ---------- | ---------------------------------------- |
 | Framework  | Next.js 15 (App Router)                  |
 | Language   | TypeScript (strict, zero `any`)          |
-| Styling    | Tailwind CSS 3 + custom Swiss grid       |
+| Styling    | Tailwind CSS 3 + custom 12-col grid      |
 | UI         | Radix primitives (shadcn/ui) + Sheet drawer |
-| Animation  | Framer Motion (drag/snap carousel only)  |
+| Animation  | Framer Motion (drag/snap carousel) + IntersectionObserver reveals |
 | Auth       | NextAuth (Credentials + JWT)             |
 | DB / ORM   | PostgreSQL + Prisma (prod) / SQLite (dev)|
 | Email      | Resend (Nodemailer fallback)             |
@@ -35,15 +35,15 @@ The site is deployed to **Vercel** with a **Neon Postgres** database. Project da
 │   ├── seed.ts                # 3 realistic seed projects + admin user
 │   └── dev.db                 # Local SQLite database (gitignored)
 ├── public/
-│   └── favicon.svg            # SVG favicon fallback
+│   └── favicon.svg            # SVG favicon fallback (Apple "C" monogram)
 ├── src/
 │   ├── app/
-│   │   ├── background.tsx     # Layered analog bg: blobs, grid, rAF parallax
+│   │   ├── background.tsx     # Layered white bg: hero glow + static blue blob
 │   │   ├── favicon.ico/route.tsx  # Generated favicon (ImageResponse)
 │   │   ├── icon.tsx           # Generated PNG icon (ImageResponse)
-│   │   ├── globals.css        # Paper base, grain, grid, clamp type, a11y
+│   │   ├── globals.css        # Apple palette, type scale, shadows, a11y
 │   │   ├── layout.tsx         # Root layout w/ Background + safe-areas
-│   │   ├── page.tsx           # Homepage (hero + featured projects)
+│   │   ├── page.tsx           # Homepage (Apple hero + featured projects)
 │   │   ├── api/
 │   │   │   ├── auth/[...nextauth]/route.ts
 │   │   │   ├── admin/projects/(route.ts | [id]/route.ts)
@@ -56,8 +56,8 @@ The site is deployed to **Vercel** with a **Neon Postgres** database. Project da
 │   │   └── contact/(page.tsx | ContactForm.tsx)
 │   ├── components/
 │   │   ├── nav.tsx              # Server wrapper (session)
-│   │   ├── nav-client.tsx       # Mobile Sheet drawer menu
-│   │   ├── ambient-audio.tsx    # Calm CC0 background music + toggle
+│   │   ├── nav-client.tsx       # Mobile Sheet drawer menu (blur backdrop)
+│   │   ├── reveal.tsx           # Apple-style IntersectionObserver reveal
 │   │   ├── footer.tsx
 │   │   ├── project-card.tsx
 │   │   ├── project-carousel.tsx # Framer Motion drag/snap carousel
@@ -71,6 +71,36 @@ The site is deployed to **Vercel** with a **Neon Postgres** database. Project da
 ├── tailwind.config.ts
 └── tsconfig.json
 ```
+
+## Design System (Section II)
+
+The palette and type mirror apple.com product pages:
+
+| Token      | Value                           | Use                              |
+| ---------- | ------------------------------- | -------------------------------- |
+| `appbg`    | `#ffffff`                       | Background (pure white, not off-white) |
+| `ink`      | `#1d1d1f`                       | Text primary (Apple's dark gray) |
+| `subtext`  | `#86868b`                       | Subtitles & metadata             |
+| `accent`   | `#0071e3` (hover `#0077ed`)     | CTAs and interactive elements    |
+| `hairline` | `#d2d2d7`                        | 0.5px section separators         |
+| `danger`   | `#d70015` (Apple system red)    | Validation / destructive states  |
+
+- **Fonts:** SF Pro Display stack (`-apple-system`, `BlinkMacSystemFont`, `Segoe UI`, …). Headings `font-weight: 700`, subheadings `600`.
+- **Hero:** `clamp(3rem, 10vw, 5.5rem)` with `letter-spacing: -0.045em` and `padding-top: clamp(6rem, 15vh, 12rem)`.
+- **Body:** `1.0625rem` (17px) with Apple's exact `line-height: 1.47059`.
+- **Scale:** perfect fourth (1.333x), all fluid via `clamp()`, never below 16px on mobile.
+- **Layout:** `max-width: 980px` for text (`max-w-text`), `1200px` for project grids (`max-w-grid`), 12-column grid with `gap`.
+- **Shadows:** cards use `0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.02)`; hover lifts to `0 20px 40px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.06)`.
+- **Reveals:** `components/reveal.tsx` uses an IntersectionObserver to fade content in with a `translateY(20px) → 0` transition (0.6s ease-out), respecting `prefers-reduced-motion`.
+- **Micro-interactions:** focus rings shift to blue; buttons scale to 1.02 on hover with a shadow lift; card images scale to 1.02 over 0.3s on hover.
+
+### Background (Section IV)
+
+`src/app/background.tsx` layers behind content:
+
+1. **Pure white** base (`#ffffff`).
+2. **Hero glow** — a soft radial `#f5f5f7` wash at the top fading to white.
+3. **One static blue blob** — `radial-gradient` of `#0071e3` at 5% opacity, `blur(150px)`, in the hero only. **Static, not animated.** Blur is halved on touch/coarse screens via a CSS variable.
 
 ## Setup
 
@@ -92,9 +122,8 @@ Generate a secret and set it:
 openssl rand -base64 32
 ```
 
-The default `.env` points at your **production PostgreSQL** database. Set
-`DATABASE_PROVIDER`/`DATABASE_URL`/`NEXTAUTH_SECRET`/`NEXTAUTH_URL` and the
-contact-mail vars (`RESEND_API_KEY` + `CONTACT_EMAIL`, or `SMTP_*`).
+Set `DATABASE_URL`/`NEXTAUTH_SECRET`/`NEXTAUTH_URL`, and the contact-mail vars
+(`RESEND_API_KEY` + `CONTACT_EMAIL`, or `SMTP_*`).
 
 ### 3. Set up the database — PostgreSQL (production)
 
@@ -105,18 +134,16 @@ npm run db:seed     # seeds 3 projects + admin user
 
 ### 4. Local dev with SQLite (no Postgres needed)
 
-Everything is pre-wired for a zero-install local DB. In a separate terminal /
-shell (or before running dev):
-
 ```bash
 npm run db:sqlite:setup   # generate client + push schema from schema.sqlite.prisma
 npm run db:sqlite:seed    # seed the SQLite database
 ```
 
-> **Note:** when targeting SQLite, run the dev server and any `prisma` commands
-> with `DATABASE_URL="file:./dev.db"` in the environment. The SQLite schema file
-> is **identical** to the Postgres one — only the `provider` differs — so no
-> data-model code changes are needed.
+> **Note:** when targeting SQLite, run the dev server with
+> `DATABASE_URL="file:./dev.db"` in the environment — the URL is resolved
+> relative to the Prisma schema folder, so the db lives at `prisma/dev.db`.
+> The SQLite schema file is **identical** to the Postgres one — only the
+> `provider` differs — so no data-model code changes are needed.
 
 ### 5. Run
 
@@ -131,81 +158,32 @@ Open http://localhost:3000
 - Local login: http://localhost:3000/admin
 - Default credentials (from seed): `admin@portfolio.dev` / `admin123`
 
-**Change the password immediately** after first login (`prisma.user.update` or
-re-seed after editing the seed hash).
+**Change the password immediately** after first login.
 
 ## Projects Carousel (Section III)
 
 `src/components/project-carousel.tsx` implements the horizontal drag slide:
 
-- **Drag** horizontally on desktop; **swipe** one finger on mobile — powered by
-  Framer Motion `useMotionValue`, `useTransform`, `drag="x"`,
-  `dragConstraints`, `dragElastic={0.1}` and `dragMomentum`.
+- **Drag** horizontally on desktop; **swipe** on mobile — Framer Motion
+  `useMotionValue`, `useTransform`, `drag="x"`, `dragConstraints`,
+  `dragElastic={0.1}`, `dragMomentum`.
 - **Snap:** on release the nearest card eases to the viewport centre.
-- The single MotionValue is mirrored to native `scrollLeft`, so the **standard
-  scrollbar stays visible** (overflow is not hidden) and keyboard/pagination
-  maths share one source of truth.
-- **Indicators:** left/right gradient edge fades + pagination dots below that
-  update live while dragging.
-- **Responsive cards-per-view:** 1.1 (≈1) mobile, 1.5 tablet, 2.5 desktop.
+- The MotionValue is mirrored to native `scrollLeft`, so the **standard
+  scrollbar stays visible** (overflow is not hidden).
+- **Indicators:** left/right white gradient edge fades + pagination dots
+  (small gray circles; active is a blue pill) that update live while dragging,
+  with full 44px tap targets.
+- **Responsive cards-per-view:** 1.1 (≈1 + 10px peek) mobile, 1.5 tablet, 2.5 desktop.
 - **A11y:** the region is focusable and **Left/Right arrow keys** navigate.
-- **Performance:** `will-change: transform` on slides; resize is debounced via
+- **Performance:** `will-change: transform` on slides; resize debounced via
   `requestAnimationFrame`; `touch-action: pan-y` preserves vertical scrolling.
-
-## Background (Section IV)
-
-`src/app/background.tsx` (client) layers, behind content:
-
-1. **Base** — warm paper radial gradient defined in `globals.css`
-   (#fdfcfa → #efece6).
-2. **Texture** — an inline SVG `feTurbulence` fractal-noise data URI on the
-   body `::before` pseudo-element, `mix-blend-mode: multiply` at ~4% (2% on
-   touch), so the repaint cost is constant and tiny.
-3. **Blobs** — two large soft radial-gradient shapes (top-right ochre `#d4c5b2`
-   @30%, bottom-left terracotta `#c9694b` @12%). Blur is a CSS variable halved
-   on coarse-pointer screens (Section VI).
-4. **Grid** — a low-contrast 12-column overlay (5%, `#2d2a24`), large screens only.
-
-The blobs drift on a slow autonomous sine sway and additionally shift ~10px
-toward the cursor with `requestAnimationFrame` (not CSS transitions). Parallax
-is **disabled on touch** via `(hover: hover)`/`ontouchstart` detection and under
-`prefers-reduced-motion`.
-
-## Calm Ambient Music & Aesthetic (Section "No AI Slop")
-
-The brutalist identity is kept (hard edges, no glass/gradient-slop), but the
-page is calmed with tasteful, additive layers:
-
-1. **Refined paper texture + slow blob drift + quiet warm field** — the paper
-   base is a soft multi-stop radial with a warm light falloff, the film grain is
-   two-scale (broad + fine speckle) for an offset-print feel, and a faint
-   "printed-sheet" vignette gives edge depth. The blobs breathe on a ~9s sine
-   sway combined with the mouse parallax, and a low-opacity ochre wash
-   (`rgba(212,163,115,0.10)`) softens contrast. All within the existing palette;
-   grain turns to 2% opacity on touch for GPU savings.
-2. **Calm background music** — `src/components/ambient-audio.tsx` streams a
-   **CC0 public-domain ambient pad** ("bee-hive-pad" by John Bartmann, via
-   Wikimedia Commons). It attempts low-volume autoplay (~0.08); if the browser
-   blocks it, a small hard-edged **Sound** control (bottom-right, ≥44px) lets
-   the visitor start/pause it.
-
-### Self-hosting MP3 (full Safari support)
-
-Safari cannot decode the default OGG track, so for full browser coverage:
-
-1. Put a licensed MP3 at `public/audio/calm.mp3` (see `public/audio/README.md`).
-2. Set `NEXT_PUBLIC_AMBIENT_AUDIO_URL=/audio/calm.mp3` in `.env`.
-3. Rebuild (NEXT_PUBLIC_ vars are inlined at build time).
-
-The MP3 becomes the primary `<source>`; the CC0 OGG is kept automatically as a
-fallback if the MP3 fails to load.
 
 ## Favicon (Section V)
 
-- `src/app/favicon.ico/route.tsx` renders a sharp geometric mark (diagonal
-  terracotta slash intersecting a near-black circle) via `ImageResponse`.
-- `src/app/icon.tsx` generates the PNG `/icon`, and `public/favicon.svg` is
-  linked in `layout.tsx` via the metadata `icons` export as a fallback.
+`src/app/favicon.ico/route.tsx`, `src/app/icon.tsx`, and `public/favicon.svg`
+each render an Apple-style minimalist "C" monogram — bold, `#1d1d1f`, on pure
+white — crisp in both dark and light browser tabs. The SVG is linked in
+`layout.tsx` via the metadata `icons` export as a fallback.
 
 ## Contact Form
 
@@ -215,41 +193,27 @@ on both client and server.
 
 ## Responsive & Mobile Guidelines (Section VI)
 
-Every element is mobile-first. Documented breakpoints:
+| Range      | Layout grid | Cards/view (carousel) | Nav           |
+| ---------- | ----------- | --------------------- | ------------- |
+| < 480px    | 1 col       | ~1                    | Sheet drawer  |
+| 480–639px  | 4 cols      | ~1                    | Sheet drawer  |
+| 640–767px  | 4 cols      | ~1                    | Sheet drawer  |
+| 768–1023px | 8 cols      | 1.5                   | Inline nav    |
+| ≥ 1024px   | 12 cols     | 2.5                   | Inline nav    |
 
-| Range            | Layout grid | Cards/view (carousel) | Nav                  |
-| ---------------- | ----------- | --------------------- | -------------------- |
-| < 480px          | 1 col (full-bleed) | ~1           | Sheet drawer         |
-| 480–639px        | 4 cols      | ~1                    | Sheet drawer         |
-| 640–767px        | 4 cols      | ~1                    | Sheet drawer         |
-| 768–1023px       | 8 cols      | 1.5                   | Inline desktop nav   |
-| ≥ 1024px         | 12 cols     | 2.5                   | Inline desktop nav   |
-
-Mobile specifics implemented:
-
-- **Viewport & safe areas** — `width=device-width, initial-scale=1` in the
-  layout `viewport` export; `env(safe-area-inset-*)` padding on body + drawer.
-- **Responsive type** — `clamp()` for all text sizes; body text stays ≥ 16px on
-  mobile to prevent iOS auto-zoom.
-- **Hamburger → Sheet** — `components/nav-client.tsx` (shadcn/ui `Sheet`),
-  closes on every link click, full 44px+ tap targets.
-- **Tap targets** — buttons, links, inputs, pagination dots and carousel cards
-  all ≥ 44px (`TAP_MIN` / `min-height` utilities).
-- **Admin mobile UX** — table keeps `overflow-x-auto`; form controls and action
-  buttons are `w-full` on small screens; stat cards stack to 1 column.
-- **Background perf** — blur halved (60/80px) and grain @2% on touch; parallax
-  disabled; `overflow-x-hidden` guards horizontal scroll.
-- **Images** — all use `next/image` with `sizes` for proper srcset generation.
+Implemented: `env(safe-area-inset-*)` padding, `clamp()` type (body ≥ 16px on
+mobile to avoid iOS zoom), hamburger → shadcn/ui Sheet with blur backdrop, 44px+
+tap targets everywhere, `overflow-x-auto` on the admin table, full-width form
+controls on small screens, blur halved on touch, `overflow-x-hidden` body guard,
+and `next/image` with `sizes` for proper srcset.
 
 ### Manual mobile testing checklist
 
-1. Resize from 320px → 1920px; confirm no horizontal scrollbar appears.
-2. Open the Sheet drawer on <768px; verify it closes when tapping any link.
-3. On a touch device, swipe the carousel horizontally six times; confirm each
-   slide snaps to centre and vertical page scroll still works.
-4. Tap every interactive element (nav, buttons, dots, inputs) and confirm the
-   effective hit area is ≥ 44×44px.
-5. In DevTools device mode, confirm grain opacity ≈ 2% and blob blur reduced.
+1. Resize 320px → 1920px; confirm no horizontal scrollbar.
+2. Open the Sheet drawer on <768px; verify it closes on any link tap.
+3. Swipe the carousel on touch; confirm each slide snaps to centre and vertical scroll still works.
+4. Tap every interactive element and confirm ≥ 44×44px hit area.
+5. In DevTools device mode, confirm the blue blob blur is reduced.
 6. Verify the favicon renders in a dark and light browser tab.
 
 ## Scripts
@@ -272,11 +236,11 @@ Mobile specifics implemented:
 - API routes validate the session server-side before any CRUD operation.
 - Passwords are hashed with `bcryptjs`.
 - Auth uses JWT sessions; Credentials provider only.
-- The `favicon` and admin routes disable index/follow robots where applicable.
+- Admin + favicon routes disable index/follow robots where applicable.
 
 ## Animations Policy (Section II)
 
-The only animations allowed are: `scale(0.95)` on button clicks, color-shift on
-link hover, and a border glow on input focus. The carousel's drag physics is the
-sole exception (it is an interaction, not a reveal). `prefers-reduced-motion` is
-respected throughout.
+Allowed: scroll-reveal (0.6s ease-out fade-up), `scale(1.02)` on button hover /
+image hover, background-color/interaction transitions, and the carousel's drag
+physics. `prefers-reduced-motion` is respected throughout via `reveal.tsx` and
+`globals.css`.
