@@ -8,6 +8,10 @@
     --nearblack: #18181b;
     --terracotta: #c9694b;
     --ochre: #d4a373;
+    --paper: #f7f4f0;
+    --paper-light: #fdfcfa;
+    --paper-dark: #efece6;
+    --grain: #2d2a24;
   }
 
   * {
@@ -18,12 +22,65 @@
     scroll-behavior: smooth;
   }
 
+  html,
   body {
-    background-color: var(--offwhite);
+    /* Prevent any horizontal scroll from carousel edges, blobs, or grid. */
+    overflow-x: hidden;
+  }
+
+  body {
+    /* Refined paper base: a soft warm light source near the top centre that
+       falls off gradually through the paper tone into a slightly darker edge —
+       reads as a sheet of warm paper under soft ambient light, not a flat or
+       glitzy gradient. */
+    background-color: var(--paper);
+    background-image: radial-gradient(
+      ellipse 120% 80% at 50% 18%,
+      #fffefb 0%,
+      var(--paper-light) 24%,
+      var(--paper) 56%,
+      var(--paper-dark) 100%
+    );
+    background-repeat: no-repeat;
+    min-height: 100vh;
     color: var(--nearblack);
     font-family: theme("fontFamily.sans");
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ---- Film-grain / handmade-paper texture via pseudo-element ---- */
+  /* Two-scale inline SVG feTurbulence fractal noise (a broad grain plus a fine
+     speckle), blended at low opacity via multiply for a tactile, offset-print
+     feel. Using position:fixed pseudos avoids repaints and keeps the effect
+     (not the whole page) cheap. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.05; /* 5% on desktop */
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.7' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 128px 128px, 96px 96px;
+  }
+
+  /* ---- Subtle "printed sheet" vignette ---- */
+  /* A very soft darkening at the viewport edges to give the page depth, like
+     the edges of a sheet held away from a light source. Deliberately faint. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 120% 120% at 50% 50%,
+      transparent 58%,
+      rgba(24, 24, 27, 0.06) 100%
+    );
   }
 
   ::selection {
@@ -40,11 +97,21 @@
     font-family: theme("fontFamily.mono");
     font-weight: 700;
   }
+
+  /* Responsive, fluid type using clamp(). Body stays >= 16px on mobile to
+     prevent iOS auto-zoom. */
+  body,
+  p,
+  li {
+    font-size: clamp(1rem, 1rem + 0.2vw, 1.0625rem);
+  }
 }
 
 @layer components {
   .btn {
     @apply inline-flex items-center justify-center px-5 py-3 text-sm font-medium transition-transform duration-150 ease-out;
+    /* Minimum 44px tap target (Apple HIG) + 44px tall (WCAG 2.1). */
+    min-height: 2.75rem;
   }
 
   .btn:active {
@@ -61,6 +128,9 @@
 
   .link-hover {
     @apply relative transition-colors duration-200;
+    /* Expand the invisible hit area of inline links to a 44px target. */
+    padding-block: 0.5rem;
+    line-height: 1.25rem;
   }
 
   .link-hover:hover {
@@ -69,11 +139,26 @@
 
   .input-field {
     @apply w-full bg-transparent border-b-2 border-nearblack/30 px-3 py-2 text-sm focus:outline-none transition-shadow duration-200;
+    min-height: 2.75rem; /* 44px tap target for form inputs */
   }
 
   .input-field:focus {
     border-color: var(--terracotta);
-    box-shadow: 0 2px 0 0 var(--terracotta);
+    /* Border-glow on focus: a soft halo that respects the brutalist no-radii
+       language while still signalling focus. */
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--terracotta) 25%, transparent);
+    outline: none;
+  }
+
+  .input-field:focus-visible {
+    outline: 2px solid var(--terracotta);
+    outline-offset: 2px;
+  }
+
+  /* Carousel container: lock horizontal touch panning to the carousel only,
+     so vertical page scrolling is never hijacked while swiping sideways. */
+  .carousel-pan {
+    touch-action: pan-y;
   }
 
   .row {
@@ -107,5 +192,63 @@
     .md:col-span-10 { grid-column: span 10 / span 10; }
     .md:col-span-11 { grid-column: span 11 / span 11; }
     .md:col-span-12 { grid-column: span 12 / span 12; }
+  }
+}
+
+/* ---- Mobile background performance (Section VI) ---- */
+/* Drive blob blur from CSS variables so it can be halved on touch/coarse
+   pointers. Defaults are desktop values; the coarse-pointer media query below
+   replaces them with 50% values (120px -> 60px, 160px -> 80px) to save GPU. */
+:root {
+  --blob-blur-top: 120px;
+  --blob-blur-bottom: 160px;
+}
+
+/* Reduce grain opacity to 2% and halve blob blur on touch/coarse screens. */
+@media (hover: none), (pointer: coarse) {
+  :root {
+    --blob-blur-top: 60px;
+    --blob-blur-bottom: 80px;
+  }
+  body::before {
+    opacity: 0.02;
+  }
+}
+
+/* ---- Safe-area insets for notched devices (Section VI) ---- */
+@supports (padding: env(safe-area-inset-top)) {
+  @media (min-width: 1px) {
+    .pt-safe {
+      padding-top: env(safe-area-inset-top);
+    }
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .pl-safe {
+      padding-left: env(safe-area-inset-left);
+    }
+    .pr-safe {
+      padding-right: env(safe-area-inset-right);
+    }
+  }
+}
+
+/* Keep focus visible but subtle everywhere without relying on reveal on scroll */
+*:focus {
+  outline: none;
+}
+*:focus-visible {
+  outline: 2px solid var(--terracotta);
+  outline-offset: 2px;
+}
+
+/* Respect users who asked for reduced motion: our only allowed motion is
+   the blobs parallax, which we neutralise here. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .bg-blob {
+    transform: none !important;
   }
 }

@@ -28,7 +28,7 @@ export function ProjectCard({
             alt={project.title}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+            className="object-cover"
           />
         )}
       </div>

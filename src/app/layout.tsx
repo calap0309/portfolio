@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { Background } from "./background";
+import { AmbientAudio } from "@/components/ambient-audio";
 
 export const metadata: Metadata = {
   title: {
@@ -14,18 +16,25 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fafaf8",
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#f7f4f0",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="bg-offwhite text-nearblack">
-      <body className="min-h-screen antialiased">
-        <div className="mx-auto w-full max-w-6xl px-6 md:px-10">
-          {children}
-        </div>
+    <html lang="en" className="bg-paper text-nearblack">
+      {/* Safe-area insets + overflow guard are applied on the body via CSS;
+          Background provides the layered paper/blobs/grid behind content. */}
+      <body className="min-h-screen antialiased pt-safe pb-safe">
+        <Background>
+          <div className="mx-auto w-full max-w-6xl px-6 md:px-10">
+            {children}
+          </div>
+        </Background>
+        <AmbientAudio />
       </body>
     </html>
   );

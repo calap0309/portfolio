@@ -95,7 +95,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="btn btn-primary justify-center disabled:opacity-50"
+        className="btn btn-primary justify-center w-full disabled:opacity-50"
       >
         {isSubmitting ? "Signing in…" : "Sign in"}
       </button>

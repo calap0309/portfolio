@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import typography from "@tailwindcss/typography";
+import animate from "tailwindcss-animate";
 
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
@@ -10,6 +11,13 @@ const config: Config = {
         nearblack: "#18181b",
         terracotta: "#c9694b",
         ochre: "#d4a373",
+        paper: {
+          DEFAULT: "#f7f4f0",
+          light: "#fdfcfa",
+          dark: "#efece6",
+          grain: "#2d2a24",
+          500: "#d4c5b2",
+        },
       },
       fontFamily: {
         mono: ["JetBrains Mono", "Georgia", "monospace"],
@@ -32,7 +40,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [typography],
+  plugins: [typography, animate],
 };
 
 export default config;

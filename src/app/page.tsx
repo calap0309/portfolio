@@ -28,13 +28,16 @@ export default async function HomePage() {
               <p className="font-mono text-sm uppercase tracking-[0.2em] text-terracotta">
                 Calap — Full-Stack Engineer
               </p>
-              <h1 className="mt-6 font-mono text-6xl md:text-7xl leading-none tracking-tighter">
+              <h1
+                className="mt-6 font-mono leading-none tracking-tighter"
+                style={{ fontSize: "clamp(2.5rem, 8vw, 5rem)" }}
+              >
                 CALAP
               </h1>
-              <h2 className="mt-4 font-mono text-2xl md:text-3xl leading-tight tracking-tight text-nearblack/80">
+              <h2 className="mt-4 font-mono leading-tight tracking-tight text-nearblack/80 text-[clamp(1.4rem,4vw,2rem)]">
                 Engineering durable systems over chasing&nbsp;trends.
               </h2>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-nearblack/70">
+              <p className="mt-6 max-w-xl leading-relaxed text-nearblack/70 text-[clamp(1rem,1rem+0.2vw,1.0625rem)]">
                 I build real-time infrastructure, state architectures, and
                 developer tooling that scale under load — not marketing pages
                 that fade out in a year.

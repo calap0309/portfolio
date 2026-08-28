@@ -136,7 +136,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="btn btn-primary disabled:opacity-50"
+          className="btn btn-primary w-full sm:w-auto disabled:opacity-50"
         >
           {status === "sending" ? "Transmitting…" : "Send message"}
         </button>

@@ -47,7 +47,36 @@ export default async function AdminPage() {
         Signed in as <span className="text-nearblack">{email}</span>
       </p>
 
+      {/* Stats — wrap to 1 column on mobile. */}
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <Stat label="Total projects" value={projects.length} />
+        <Stat label="Featured" value={projects.filter((p) => p.featured).length} />
+        <Stat
+          label="Last updated"
+          value={
+            projects.length
+              ? new Intl.DateTimeFormat("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                }).format(projects[0].updatedAt)
+              : "—"
+          }
+        />
+      </div>
+
       <AdminProjects initialProjects={projects} />
     </main>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: number | string }) {
+  return (
+    <div className="flex flex-col gap-1 border border-nearblack bg-offwhite p-5">
+      <span className="font-mono text-xs uppercase tracking-wide text-nearblack/60">
+        {label}
+      </span>
+      <span className="font-mono text-2xl leading-none">{value}</span>
+    </div>
   );
 }

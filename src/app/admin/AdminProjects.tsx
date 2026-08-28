@@ -183,7 +183,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
         </h2>
         <button
           onClick={openCreate}
-          className="btn btn-primary"
+          className="btn btn-primary w-full sm:w-auto"
           type="button"
         >
           + New project
@@ -252,14 +252,14 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                     <div className="flex gap-3">
                       <button
                         onClick={() => openEdit(project)}
-                        className="text-sm link-hover"
+                        className="text-sm link-hover inline-flex min-h-[2.75rem] items-center"
                         type="button"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(project.id)}
-                        className="text-sm text-terracotta link-hover"
+                        className="text-sm text-terracotta link-hover inline-flex min-h-[2.75rem] items-center"
                         type="button"
                       >
                         Delete
@@ -450,10 +450,10 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                 Featured on homepage
               </label>
 
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
                 <button
                   onClick={() => setEditor(null)}
-                  className="btn btn-outline"
+                  className="btn btn-outline w-full sm:w-auto"
                   type="button"
                 >
                   Cancel
@@ -461,7 +461,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn btn-primary disabled:opacity-50"
+                  className="btn btn-primary w-full sm:w-auto disabled:opacity-50"
                 >
                   {submitting
                     ? editor?.mode === "edit"

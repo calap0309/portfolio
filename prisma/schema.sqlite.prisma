@@ -1,0 +1,40 @@
+// Local development schema — relies on Prisma's bundled engine that supports SQLite.
+// Point the generated client at this schema for local work, then re-generate:
+//   npx prisma generate --schema prisma/schema.sqlite.prisma
+// The production schema (prisma/schema.prisma) uses PostgreSQL and keeps the
+// exact same models — the only difference is the `provider` field.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  projects      Project[]
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  coverImage  String?
+  liveUrl     String?
+  githubUrl   String?
+  tags        String   @default("[]")
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

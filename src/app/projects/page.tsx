@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
-import { ProjectCard } from "@/components/project-card";
+import { ProjectCarousel } from "@/components/project-carousel";
 
 export const metadata: Metadata = {
   title: "Work",
@@ -24,39 +24,30 @@ export default async function ProjectsPage() {
   return (
     <>
       <Nav />
-      <main className="py-20">
+      <main className="py-16 md:py-20">
         <div className="row">
           <div className="col-span-12 md:col-span-10 md:col-start-2">
             <p className="font-mono text-sm uppercase tracking-[0.2em] text-terracotta">
               Work
             </p>
-            <h1 className="mt-4 font-mono text-4xl md:text-5xl tracking-tight">
+            <h1 className="mt-4 font-mono text-4xl tracking-tight md:text-5xl">
               Public index of projects.
             </h1>
             <p className="mt-4 max-w-lg text-base text-nearblack/70">
               Tools, libraries, and infrastructure I designed and shipped. Each
-              entry is a production system, not a tutorial follow-along.
+              entry is a production system, not a tutorial follow-along. Drag,
+              swipe, or use the arrow keys to move through them.
             </p>
           </div>
         </div>
 
-        <div className="row mt-16 gap-x-6 gap-y-12">
+        <div className="mt-12 md:mt-16">
           {projects.length === 0 ? (
-            <div className="col-span-12 border border-dashed border-nearblack/40 p-12 text-center font-mono text-sm text-nearblack/50">
+            <div className="border border-dashed border-nearblack/40 p-12 text-center font-mono text-sm text-nearblack/50">
               No projects published yet.
             </div>
           ) : (
-            projects.map((project, i) => (
-              <ProjectCard
-                key={project.id}
-                project={{
-                  ...project,
-                  createdAt: project.createdAt,
-                  updatedAt: project.updatedAt,
-                }}
-                wide={i % 3 === 1}
-              />
-            ))
+            <ProjectCarousel projects={projects} />
           )}
         </div>
       </main>
