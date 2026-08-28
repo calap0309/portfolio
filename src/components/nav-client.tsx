@@ -10,6 +10,7 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet";
+import { ThemeToggle } from "./theme-toggle";
 
 const links = [
   { href: "/", label: "Home" },
@@ -30,7 +31,7 @@ export function NavClient({ isAdmin }: { isAdmin: boolean }) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         aria-label="Open menu"
-        className="inline-flex h-11 w-11 items-center justify-center rounded-full text-ink transition-colors hover:bg-[#f5f5f7]"
+        className="inline-flex h-11 w-11 items-center justify-center rounded-full text-ink transition-colors hover:bg-surface-soft"
       >
         <Menu className="h-6 w-6" />
       </SheetTrigger>
@@ -38,7 +39,11 @@ export function NavClient({ isAdmin }: { isAdmin: boolean }) {
         <SheetTitle className="text-sm font-semibold text-subtext">
           Menu
         </SheetTitle>
-        <nav className="mt-8 flex flex-col gap-1">
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-sm font-medium text-subtext">Theme</span>
+          <ThemeToggle />
+        </div>
+        <nav className="mt-6 flex flex-col gap-1">
           {links.map((link) => (
             <SheetClose asChild key={link.href}>
               <Link

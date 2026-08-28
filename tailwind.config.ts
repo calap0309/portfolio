@@ -17,21 +17,33 @@ import animate from "tailwindcss-animate";
  * stays fluid and never drops below 16px on mobile (avoids iOS auto-zoom).
  */
 const config: Config = {
+  darkMode: "class",
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        appbg: "#ffffff",
-        ink: "#1d1d1f",
-        subtext: "#86868b",
+        appbg: "rgb(var(--appbg) / <alpha-value>)",
+        ink: "rgb(var(--ink) / <alpha-value>)",
+        subtext: "rgb(var(--subtext) / <alpha-value>)",
         accent: {
-          DEFAULT: "#0071e3",
-          hover: "#0077ed",
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
+          hover: "rgb(var(--accent-hover) / <alpha-value>)",
         },
-        hairline: "#d2d2d7",
-        heroglow: "#f5f5f7",
+        hairline: "rgb(var(--hairline) / <alpha-value>)",
+        heroglow: "rgb(var(--heroglow) / <alpha-value>)",
         /* Apple system red — used only for validation / destructive states. */
-        danger: "#d70015",
+        danger: "rgb(var(--danger) / <alpha-value>)",
+        /*
+         * Semantic surfaces, also CSS-var driven so they flip with theme.
+         *   surface      — primary elevated surface (cards, sheets, nav).
+         *   surface-soft — secondary grey wash (image placeholders, hovers).
+         *   surface-tag  — chip/filter background.
+         */
+        surface: {
+          DEFAULT: "rgb(var(--surface) / <alpha-value>)",
+          soft: "rgb(var(--surface-soft) / <alpha-value>)",
+          tag: "rgb(var(--surface-tag) / <alpha-value>)",
+        },
       },
       fontFamily: {
         sans: [

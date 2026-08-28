@@ -43,7 +43,7 @@ export default async function ProjectsPage() {
 
         <div className="mt-12 md:mt-16">
           {projects.length === 0 ? (
-            <div className="rounded-2xl hairline bg-[#f5f5f7] p-14 text-center text-subtext">
+            <div className="rounded-2xl hairline bg-surface-soft p-14 text-center text-subtext">
               No projects published yet.
             </div>
           ) : (

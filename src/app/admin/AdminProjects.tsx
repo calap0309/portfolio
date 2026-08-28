@@ -191,16 +191,16 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
       </div>
 
       {error && (
-        <div className="mt-4 rounded-xl bg-[#f5f5f7] px-4 py-2 text-sm text-danger">
+        <div className="mt-4 rounded-xl bg-surface-soft px-4 py-2 text-sm text-danger">
           {error}
         </div>
       )}
 
       {/* Table: horizontal overflow on mobile, hairline borders. */}
-      <div className="mt-6 overflow-x-auto rounded-2xl hairline bg-white shadow-card">
+      <div className="mt-6 overflow-x-auto rounded-2xl hairline bg-surface shadow-card">
         <table className="w-full border-collapse text-left text-sm">
           <thead>
-            <tr className="hairline-b bg-[#fafafa]">
+            <tr className="hairline-b bg-surface-tag">
               <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-subtext">
                 Title
               </th>
@@ -278,7 +278,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
       >
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 z-40 bg-black/20 backdrop-blur-md" />
-          <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl bg-white p-6 shadow-xl md:p-8">
+          <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl bg-surface p-6 shadow-xl md:p-8">
             <Dialog.Title className="text-2xl font-bold tracking-tight2">
               {editor?.mode === "edit" ? "Edit project" : "New project"}
             </Dialog.Title>

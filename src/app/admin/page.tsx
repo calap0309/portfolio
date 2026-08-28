@@ -72,7 +72,7 @@ export default async function AdminPage() {
 
 function Stat({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="flex flex-col gap-1 rounded-2xl hairline bg-white p-5 shadow-card">
+    <div className="flex flex-col gap-1 rounded-2xl hairline bg-surface p-5 shadow-card">
       <span className="text-xs font-semibold uppercase tracking-wide text-subtext">
         {label}
       </span>

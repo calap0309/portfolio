@@ -83,7 +83,7 @@ export function LoginForm() {
       </div>
 
       {error && (
-        <p className="rounded-xl bg-[#f5f5f7] px-4 py-2 text-sm text-danger">
+        <p className="rounded-xl bg-surface-soft px-4 py-2 text-sm text-danger">
           {error}
         </p>
       )}

@@ -22,7 +22,7 @@ export function Background({ children }: { children: ReactNode }) {
         className="pointer-events-none fixed inset-x-0 top-0 z-0 h-[60vh]"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, #f5f5f7 0%, rgba(255,255,255,0) 70%)",
+            "radial-gradient(ellipse 80% 60% at 50% 0%, rgb(var(--heroglow)) 0%, rgb(var(--appbg) / 0) 70%)",
         }}
       />
 

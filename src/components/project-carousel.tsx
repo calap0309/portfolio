@@ -204,7 +204,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
               className={
                 i === activeIndex
                   ? "h-2 w-8 rounded-full bg-accent transition-colors duration-200"
-                  : "h-2 w-2 rounded-full bg-[#c7c7cc] transition-colors duration-200 hover:bg-[#aeaeb2]"
+                  : "h-2 w-2 rounded-full bg-subtext/50 transition-colors duration-200 hover:bg-subtext"
               }
             />
           </button>
@@ -244,9 +244,9 @@ function Slide({
     <div className="shrink-0 pr-6" style={{ width: width || "76vw" }}>
       <motion.article
         style={{ opacity }}
-        className="will-change-transform flex flex-col overflow-hidden rounded-2xl hairline bg-white shadow-card transition-shadow duration-300 ease-apple hover:shadow-card-hover"
+        className="will-change-transform flex flex-col overflow-hidden rounded-2xl hairline bg-surface shadow-card transition-shadow duration-300 ease-apple hover:shadow-card-hover"
       >
-        <div className="group relative aspect-[16/10] overflow-hidden bg-[#f5f5f7]">
+        <div className="group relative aspect-[16/10] overflow-hidden bg-surface-soft">
           {project.coverImage && (
             <Image
               src={project.coverImage}
@@ -269,7 +269,7 @@ function Slide({
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full hairline bg-[#f5f5f7] px-3 py-1 text-xs font-medium text-subtext"
+                className="rounded-full hairline bg-surface-soft px-3 py-1 text-xs font-medium text-subtext"
               >
                 {tag}
               </span>

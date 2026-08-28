@@ -134,12 +134,12 @@ export function ContactForm() {
         </button>
 
         {status === "sent" && (
-          <p className="mt-4 rounded-xl bg-[#f5f5f7] px-4 py-3 text-sm text-ink">
+          <p className="mt-4 rounded-xl bg-surface-soft px-4 py-3 text-sm text-ink">
             Message sent. I&apos;ll reply within 24 hours.
           </p>
         )}
         {status === "error" && (
-          <p className="mt-4 rounded-xl bg-[#f5f5f7] px-4 py-3 text-sm text-ink">
+          <p className="mt-4 rounded-xl bg-surface-soft px-4 py-3 text-sm text-ink">
             Delivery failed. Please email me directly instead.
           </p>
         )}

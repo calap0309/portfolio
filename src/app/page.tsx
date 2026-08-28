@@ -26,57 +26,68 @@ export default async function HomePage() {
         {/* Apple-style hero — generous whitespace, tight-tracked headline,
             near-black ink, blue CTA. Content is capped at 980px for text. */}
         <section
-          className="mx-auto max-w-text px-0"
-          style={{ paddingTop: "clamp(6rem, 15vh, 12rem)", paddingBottom: "clamp(4rem, 10vh, 8rem)" }}
+          className="mx-auto max-w-text px-0 text-center"
+          style={{ paddingTop: "clamp(6rem, 16vh, 13rem)", paddingBottom: "clamp(4rem, 11vh, 9rem)" }}
         >
-          <div className="row">
-            <div className="col-span-12">
-              <p className="text-[1.0625rem] font-semibold text-subtext">
-                Hi, I&apos;m Calap — full-stack engineer.
-              </p>
-              <h1
-                className="mt-5 text-ink"
-                style={{
-                  fontSize: "clamp(3rem, 10vw, 5.5rem)",
-                  lineHeight: 1.05,
-                  letterSpacing: "-0.045em",
-                  fontWeight: 700,
-                }}
-              >
-                I build durable systems for the&nbsp;web.
-              </h1>
-              <p className="mt-8 max-w-[540px] text-[1.0625rem] text-subtext">
-                Full-stack developer crafting real-time infrastructure, state
-                architectures, and developer tooling that scale under load.
-              </p>
-              <div className="mt-10 flex flex-wrap items-center gap-6">
-                <Link href="/projects" className="btn">
-                  View my work
-                </Link>
-                <Link href="/contact" className="btn btn-secondary">
-                  Get in touch
-                </Link>
+          <Reveal>
+            <div className="row">
+              <div className="col-span-12">
+                <span className="inline-flex items-center gap-2 rounded-full border-hairline border px-4 py-1.5 text-[0.8125rem] font-medium text-subtext">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
+                  Available for freelance
+                </span>
+                <h1
+                  className="mx-auto mt-8 max-w-[16ch] text-ink"
+                  style={{
+                    fontSize: "clamp(2.75rem, 9vw, 5.25rem)",
+                    lineHeight: 1.03,
+                    letterSpacing: "-0.045em",
+                    fontWeight: 700,
+                  }}
+                >
+                  Crafting durable systems for the&nbsp;web
+                </h1>
+                <p className="mx-auto mt-7 max-w-[46ch] text-[1.0625rem] text-subtext">
+                  I&apos;m Calap, a full-stack engineer building real-time
+                  infrastructure, state architectures, and developer tooling
+                  that scale under load.
+                </p>
+                <div className="mt-10 flex flex-wrap items-center justify-center gap-6">
+                  <Link href="/projects" className="btn">
+                    View my work
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="btn btn-secondary"
+                  >
+                    Get in touch
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         {/* Selected Work — billed grid, cards staggered (Apple centered
             asymmetry), each revealed on scroll with a gentle fade-up. */}
         <section className="mx-auto max-w-grid py-16">
           <Reveal>
-            <div className="row items-end justify-between hairline-top pt-10">
+            <div className="row items-end justify-between hairline-top pt-12">
               <div className="col-span-12 md:col-span-6">
-                <h2 className="text-[clamp(1.8rem,4vw,2.75rem)] font-bold tracking-tight2">
+                <p className="text-[0.8125rem] font-semibold uppercase tracking-widest text-subtext">
                   Selected Work
+                </p>
+                <h2 className="mt-2 text-[clamp(1.75rem,4vw,2.5rem)] font-bold tracking-tight2">
+                  Projects I&apos;m proud of
                 </h2>
               </div>
-              <div className="col-span-12 md:col-span-6 md:text-right">
+              <div className="col-span-12 mt-6 md:col-span-6 md:mt-0 md:text-right">
                 <Link
                   href="/projects"
-                  className="inline-flex items-center gap-1.5 text-[0.875rem] font-semibold text-accent transition-colors hover:text-accent-hover"
+                  className="group inline-flex items-center gap-1.5 text-[0.875rem] font-semibold text-accent transition-colors hover:text-accent-hover"
                 >
-                  All projects <ArrowRight className="h-4 w-4" />
+                  All projects
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 ease-apple group-hover:translate-x-0.5" />
                 </Link>
               </div>
             </div>

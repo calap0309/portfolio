@@ -17,8 +17,28 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#ffffff",
 };
+
+/**
+ * Sets the theme before paint to avoid a flash of wrong theme (FOUC). Runs
+ * inline and synchronously in the <head>: reads the persisted choice from
+ * localStorage, falls back to the OS `prefers-color-scheme`, then toggles the
+ * `dark` class on <html>. Mirrors ThemeToggle in src/lib/theme.tsx.
+ */
+const themeScript = `
+  (function () {
+    try {
+      var stored = localStorage.getItem("theme");
+      var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var dark = stored ? stored === "dark" : prefersDark;
+      var root = document.documentElement;
+      root.classList.toggle("dark", dark);
+      root.style.colorScheme = dark ? "dark" : "light";
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", dark ? "#0a0a0c" : "#ffffff");
+    } catch (e) {}
+  })();
+`;
 
 /**
  * Root layout.
@@ -31,10 +51,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="bg-white text-ink">
+    <html lang="en" className="bg-appbg text-ink">
+      <head>
+        <meta name="theme-color" content="#ffffff" />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-screen antialiased pt-safe pb-safe">
         <Background>
-          <div className="mx-auto w-full max-w-6xl px-6 md:px-10">
+          <div id="top" className="mx-auto w-full max-w-6xl px-6 md:px-10">
             {children}
           </div>
         </Background>
