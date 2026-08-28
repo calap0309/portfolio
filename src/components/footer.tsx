@@ -15,9 +15,9 @@ export function Footer() {
           </div>
 
           <div className="col-span-12 flex flex-col gap-3 md:col-span-6 md:flex-row md:items-center md:justify-end">
-            <div className="flex gap-8">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
               <Link
-                href="https://github.com"
+                href="https://github.com/calap0309"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-1.5 text-[0.875rem] font-normal text-subtext transition-colors duration-200 hover:text-ink"

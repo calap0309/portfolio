@@ -56,7 +56,7 @@ export function ThemeToggle() {
       aria-checked={false}
       aria-label="Toggle dark mode"
       onClick={toggle}
-      className="group relative inline-flex h-8 w-14 shrink-0 items-center rounded-full bg-heroglow hairline transition-colors duration-300 ease-apple hover:bg-surface-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:bg-surface"
+      className="group relative inline-flex h-9 w-16 shrink-0 items-center rounded-full bg-heroglow hairline transition-colors duration-300 ease-apple hover:bg-surface-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:bg-surface sm:h-8 sm:w-14"
     >
       {/* Sun — shown in light mode (left). Cross-fades out in dark. */}
       <Sun
@@ -71,7 +71,7 @@ export function ThemeToggle() {
 
       {/* Sliding knob. */}
       <span
-        className="pointer-events-none absolute inline-block h-6 w-6 rounded-full bg-white shadow-sm transition-transform duration-300 ease-apple translate-x-1 dark:translate-x-8"
+        className="pointer-events-none absolute inline-block h-7 w-7 rounded-full bg-white shadow-sm transition-transform duration-300 ease-apple translate-x-1 dark:translate-x-8 sm:h-6 sm:w-6 sm:translate-x-1 sm:dark:translate-x-7"
         aria-hidden
       />
     </button>

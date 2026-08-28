@@ -27,7 +27,7 @@ export default async function HomePage() {
             near-black ink, blue CTA. Content is capped at 980px for text. */}
         <section
           className="mx-auto max-w-text px-0 text-center"
-          style={{ paddingTop: "clamp(6rem, 16vh, 13rem)", paddingBottom: "clamp(4rem, 11vh, 9rem)" }}
+          style={{ paddingTop: "clamp(5.5rem, 15vh, 13rem)", paddingBottom: "clamp(4rem, 11vh, 9rem)" }}
         >
           <Reveal>
             <div className="row">
@@ -52,13 +52,13 @@ export default async function HomePage() {
                   infrastructure, state architectures, and developer tooling
                   that scale under load.
                 </p>
-                <div className="mt-10 flex flex-wrap items-center justify-center gap-6">
-                  <Link href="/projects" className="btn">
+                <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-6">
+                  <Link href="/projects" className="btn w-full sm:w-auto">
                     View my work
                   </Link>
                   <Link
                     href="/contact"
-                    className="btn btn-secondary"
+                    className="btn btn-secondary w-full sm:w-auto"
                   >
                     Get in touch
                   </Link>

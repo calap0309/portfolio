@@ -43,7 +43,7 @@ export function ProjectCard({
         )}
       </div>
 
-      <div className="flex flex-1 flex-col p-7">
+      <div className="flex flex-1 flex-col p-5 sm:p-7">
         <div className="flex items-center gap-3">
           <h3 className="text-xl font-bold tracking-tight2 text-ink">
             {project.title}

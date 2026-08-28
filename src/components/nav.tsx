@@ -37,8 +37,9 @@ export async function Nav() {
           <ThemeToggle />
         </nav>
 
-        {/* Mobile hamburger — below md */}
-        <div className="col-span-6 flex items-center justify-end md:hidden">
+        {/* Mobile bar — below md */}
+        <div className="col-span-6 flex items-center justify-end gap-2 md:hidden">
+          <ThemeToggle />
           <NavClient isAdmin={isAdmin} />
         </div>
       </div>

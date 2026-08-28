@@ -182,10 +182,10 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
         </motion.div>
       </div>
 
-      {/* Edge fades — subtle, tap-through, white to keep the Apple look.
-          Hidden below sm to not fight swipes. */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-12 bg-gradient-to-r from-white to-transparent sm:block" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-12 bg-gradient-to-l from-white to-transparent sm:block" />
+      {/* Edge fades — subtle, tap-through, blends with the page background
+          (theme-aware). Hidden below sm to not fight swipes. */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-12 bg-gradient-to-r from-appbg to-transparent sm:block" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-12 bg-gradient-to-l from-appbg to-transparent sm:block" />
 
       {/* Pagination dots — full 44px tap area, gap-2. Inactive dots are small
           gray circles; the active dot is a blue pill (Apple-style). */}
@@ -257,7 +257,7 @@ function Slide({
             />
           )}
         </div>
-        <div className="flex flex-col gap-3 p-6">
+        <div className="flex flex-col gap-3 p-5 sm:p-6">
           <div className="flex items-start justify-between gap-4">
             <h3 className="text-xl font-bold tracking-tight2">{project.title}</h3>
             <span className="shrink-0 text-xs font-normal uppercase tracking-wide text-subtext">

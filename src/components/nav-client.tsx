@@ -10,7 +10,6 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet";
-import { ThemeToggle } from "./theme-toggle";
 
 const links = [
   { href: "/", label: "Home" },
@@ -31,24 +30,21 @@ export function NavClient({ isAdmin }: { isAdmin: boolean }) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         aria-label="Open menu"
-        className="inline-flex h-11 w-11 items-center justify-center rounded-full text-ink transition-colors hover:bg-surface-soft"
+        className="inline-flex h-11 w-11 items-center justify-center rounded-full text-ink transition-colors hover:bg-surface-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         <Menu className="h-6 w-6" />
       </SheetTrigger>
-      <SheetContent side="right" className="w-72 pt-safe pb-safe">
-        <SheetTitle className="text-sm font-semibold text-subtext">
+      <SheetContent side="right" className="flex w-[86vw] max-w-sm flex-col pt-safe pb-safe">
+        <SheetTitle className="flex items-center gap-2 text-sm font-semibold tracking-widest uppercase text-subtext">
           Menu
         </SheetTitle>
-        <div className="mt-4 flex items-center justify-between">
-          <span className="text-sm font-medium text-subtext">Theme</span>
-          <ThemeToggle />
-        </div>
-        <nav className="mt-6 flex flex-col gap-1">
+
+        <nav className="mt-8 flex flex-1 flex-col">
           {links.map((link) => (
             <SheetClose asChild key={link.href}>
               <Link
                 href={link.href}
-                className="flex w-full items-center py-3 text-2xl font-bold tracking-tight2 text-ink transition-colors hover:text-accent"
+                className="-mx-4 flex w-full items-center border-b border-hairline/60 px-4 py-4 text-2xl font-bold tracking-tight2 text-ink transition-colors hover:text-accent"
               >
                 {link.label}
               </Link>
@@ -58,21 +54,21 @@ export function NavClient({ isAdmin }: { isAdmin: boolean }) {
             <SheetClose asChild>
               <Link
                 href="/admin"
-                className="flex w-full items-center py-3 text-2xl font-bold tracking-tight2 text-accent transition-colors hover:text-accent-hover"
+                className="-mx-4 flex w-full items-center px-4 py-4 text-2xl font-bold tracking-tight2 text-accent transition-colors hover:text-accent-hover"
               >
                 Admin
               </Link>
             </SheetClose>
           )}
+        </nav>
+
+        <div className="mt-6 flex flex-col gap-4">
           <SheetClose asChild>
-            <Link
-              href="/contact"
-              className="btn mt-6 w-full"
-            >
+            <Link href="/contact" className="btn w-full">
               Get in touch
             </Link>
           </SheetClose>
-        </nav>
+        </div>
       </SheetContent>
     </Sheet>
   );
