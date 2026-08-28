@@ -26,11 +26,14 @@ export default async function HomePage() {
           <div className="row">
             <div className="col-span-12 md:col-span-8 md:col-start-3">
               <p className="font-mono text-sm uppercase tracking-[0.2em] text-terracotta">
-                Full-Stack Engineer
+                Calap — Full-Stack Engineer
               </p>
-              <h1 className="mt-6 font-mono text-4xl md:text-5xl leading-tight tracking-tight">
-                Engineering durable systems over chasing&nbsp;trends.
+              <h1 className="mt-6 font-mono text-6xl md:text-7xl leading-none tracking-tighter">
+                CALAP
               </h1>
+              <h2 className="mt-4 font-mono text-2xl md:text-3xl leading-tight tracking-tight text-nearblack/80">
+                Engineering durable systems over chasing&nbsp;trends.
+              </h2>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-nearblack/70">
                 I build real-time infrastructure, state architectures, and
                 developer tooling that scale under load — not marketing pages

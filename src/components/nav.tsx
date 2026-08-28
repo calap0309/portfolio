@@ -19,7 +19,7 @@ export async function Nav() {
             href="/"
             className="font-mono text-lg font-bold tracking-tight link-hover"
           >
-            INDEX<span className="text-terracotta">.</span>
+            CALAP<span className="text-terracotta">.</span>
           </Link>
         </div>
         <nav className="col-span-6 md:col-span-6 md:col-start-7 flex justify-end gap-6">

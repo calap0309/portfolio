@@ -6,7 +6,7 @@ export function Footer() {
       <div className="row items-end justify-between gap-4">
         <div className="col-span-12 md:col-span-6">
           <p className="font-mono text-sm">
-            Built without trends. Durable by default.
+            © {new Date().getFullYear()} Calap. Built without trends. Durable by&nbsp;default.
           </p>
         </div>
         <div className="col-span-12 md:col-span-6 md:flex md:justify-end gap-6">

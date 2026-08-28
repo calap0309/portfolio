@@ -3,8 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Index Portfolio — Full-Stack Craft",
-    template: "%s | Index Portfolio",
+    default: "Calap — Full-Stack Craft",
+    template: "%s | Calap",
   },
   description:
     "Full-stack engineer building durable systems and real-time infrastructure.",
