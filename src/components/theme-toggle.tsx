@@ -1,9 +1,14 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Moon, Sun } from "lucide-react";
 
 /** Storage key shared with the inline <head> script in layout.tsx. */
 const STORAGE_KEY = "theme";
+
+function isDark(): boolean {
+  return document.documentElement.classList.contains("dark");
+}
 
 /**
  * Apple-style dark/light toggle rendered as a sliding switch.
@@ -16,11 +21,22 @@ const STORAGE_KEY = "theme";
  * simply toggles the class and persists the choice to localStorage.
  */
 export function ThemeToggle() {
+  const ref = useRef<HTMLButtonElement>(null);
+
+  /* Sync the ARIA checked state from the DOM `.dark` class. Mutates the
+     attribute directly (no setState) so it stays SSR-stable — the inline
+     <head> script applies the class before paint, and the visuals are purely
+     CSS driven, so there's no hydration mismatch. */
+  useEffect(() => {
+    ref.current?.setAttribute("aria-checked", String(isDark()));
+  }, []);
+
   const toggle = () => {
     const root = document.documentElement;
     const next = root.classList.contains("dark") ? "light" : "dark";
     root.classList.toggle("dark", next === "dark");
     root.style.colorScheme = next;
+    ref.current?.setAttribute("aria-checked", String(next === "dark"));
 
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", next === "dark" ? "#0a0a0c" : "#ffffff");
@@ -34,8 +50,10 @@ export function ThemeToggle() {
 
   return (
     <button
+      ref={ref}
       type="button"
       role="switch"
+      aria-checked={false}
       aria-label="Toggle dark mode"
       onClick={toggle}
       className="group relative inline-flex h-8 w-14 shrink-0 items-center rounded-full bg-heroglow hairline transition-colors duration-300 ease-apple hover:bg-surface-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:bg-surface"
