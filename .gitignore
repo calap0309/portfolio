@@ -32,3 +32,8 @@ next-env.d.ts
 # prisma sqlite
 prisma/dev.db
 prisma/dev.db-journal
+
+# agent skill artifacts (auto-downloaded, not part of the app)
+.agents/
+.claude/
+skills-lock.json
