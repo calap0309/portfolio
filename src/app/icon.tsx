@@ -5,11 +5,12 @@ export const contentType = "image/png";
 
 /**
  * Apple-style PNG icon (Section V): minimalist "C" monogram, bold, #1d1d1f,
- * on pure white. Crisp in both light and dark browser tabs.
+ * on a rounded white tile. Crisp in both light and dark browser tabs.
  */
 export default function Icon(): ImageResponse {
   const ink = "#1d1d1f";
   const white = "#ffffff";
+  const radius = 15;
 
   return new ImageResponse(
     (
@@ -17,7 +18,7 @@ export default function Icon(): ImageResponse {
         style={{
           width: "100%",
           height: "100%",
-          background: white,
+          background: "transparent",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -25,15 +26,29 @@ export default function Icon(): ImageResponse {
       >
         <div
           style={{
-            fontSize: 54,
-            fontWeight: 700,
-            color: ink,
-            fontFamily:
-              "-apple-system, BlinkMacSystemFont, 'SF Pro Display', Helvetica, Arial, sans-serif",
-            lineHeight: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+            background: white,
+            borderRadius: radius,
+            // Soft inner rounding so the monogram sits nicely inside the tile.
+            boxShadow: `inset 0 0 0 1px rgba(0,0,0,0.02)`,
           }}
         >
-          C
+          <div
+            style={{
+              fontSize: 54,
+              fontWeight: 700,
+              color: ink,
+              fontFamily:
+                "-apple-system, BlinkMacSystemFont, 'SF Pro Display', Helvetica, Arial, sans-serif",
+              lineHeight: 1,
+            }}
+          >
+            C
+          </div>
         </div>
       </div>
     ),
