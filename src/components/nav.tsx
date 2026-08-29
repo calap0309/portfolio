@@ -15,7 +15,7 @@ export async function Nav() {
   const isAdmin = Boolean(session?.user);
 
   return (
-    <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl hairline-b print:hidden">
+    <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl hairline-b print:hidden dark:bg-[linear-gradient(180deg,rgb(24_33_51/0.9),rgb(29_29_31/0.9))]">
       <div className="row items-center py-3">
         <div className="col-span-6 md:col-span-3">
           <Link

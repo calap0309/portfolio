@@ -31,17 +31,17 @@
     --danger: 255 96 92;
     --topwash: radial-gradient(
         ellipse 90% 70% at 50% 0%,
-        rgb(var(--heroglow) / 0.3) 0%,
+        rgb(var(--heroglow) / 0.18) 0%,
         rgb(var(--appbg) / 0) 70%
       ),
       radial-gradient(
         ellipse 55% 48% at 20% -8%,
-        rgb(var(--accent) / 0.22) 0%,
+        rgb(var(--accent) / 0.32) 0%,
         rgb(var(--accent) / 0) 62%
       ),
       radial-gradient(
         ellipse 55% 48% at 82% -8%,
-        rgb(124 77 255 / 0.18) 0%,
+        rgb(124 77 255 / 0.28) 0%,
         rgb(124 77 255 / 0) 62%
       );
     --surface: 29 29 31;
