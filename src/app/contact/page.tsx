@@ -37,7 +37,7 @@ export default function ContactPage() {
                 href={`mailto:${process.env.CONTACT_EMAIL ?? "hello@example.com"}`}
                 className="mt-2 inline-flex text-lg font-semibold text-accent transition-colors hover:text-accent-hover"
               >
-                {process.env.CONTACT_EMAIL ?? "hello@example.com"}
+                {process.env.CONTACT_EMAIL ?? "syaraffiras@gmail.com"}
               </a>
             </div>
           </div>
