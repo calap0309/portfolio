@@ -25,15 +25,15 @@ export function Footer() {
                 GitHub
               </Link>
               <Link
-                href="https://www.linkedin.com/"
+                href="https://www.tiktok.com/@calaap._22"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-1.5 text-[0.875rem] font-normal text-subtext transition-colors duration-200 hover:text-ink"
               >
-                LinkedIn
+                TikTok
               </Link>
               <Link
-                href="mailto:hello@example.com"
+                href="mailto:syaraffiras@gmail.com"
                 className="group inline-flex items-center gap-1.5 text-[0.875rem] font-normal text-subtext transition-colors duration-200 hover:text-ink"
               >
                 Email

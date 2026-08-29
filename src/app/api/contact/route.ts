@@ -30,7 +30,7 @@ export async function POST(request: Request) {
   }
 
   const { name, email, subject, message } = parsed.data;
-  const to = process.env.CONTACT_EMAIL ?? "hello@example.com";
+  const to = process.env.CONTACT_EMAIL ?? "syaraffiras@gmail.com";
 
   const apiKey = process.env.RESEND_API_KEY;
 

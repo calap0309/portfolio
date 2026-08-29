@@ -156,7 +156,7 @@ Open http://localhost:3000
 ## Admin
 
 - Local login: http://localhost:3000/admin
-- Default credentials (from seed): `admin@portfolio.dev` / `admin123`
+- Default credentials (from seed): `admin@portfolio.dev` / `firas228`
 
 **Change the password immediately** after first login.
 
