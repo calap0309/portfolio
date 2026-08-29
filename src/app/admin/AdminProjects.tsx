@@ -39,6 +39,7 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [editor, setEditor] = useState<Editor>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [syncing, setSyncing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -175,19 +176,49 @@ export function AdminProjects({ initialProjects }: AdminProjectsProps) {
     }
   }
 
+  async function handleSync() {
+    if (!confirm("Sync from GitHub (calap0309)? This will upsert all public repos and delete stale slugs. Continue?")) return;
+    setSyncing(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/sync-github", { method: "POST" });
+      const body = (await res.json()) as { ok?: boolean; error?: string; upserted?: number; deleted?: number };
+      if (!res.ok) throw new Error(body.error || "Sync failed");
+      // refresh from server
+      router.refresh();
+      // optimistic: refetch projects via GET is not exposed, so just reload page data
+      window.location.reload();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Sync failed");
+    } finally {
+      setSyncing(false);
+    }
+  }
+
   return (
     <section className="mt-10">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-bold tracking-tight2">
           Projects ({projects.length})
         </h2>
-        <button
-          onClick={openCreate}
-          className="btn w-full sm:w-auto"
-          type="button"
-        >
-          + New project
-        </button>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <button
+            onClick={handleSync}
+            disabled={syncing}
+            className="btn btn-ghost w-full sm:w-auto disabled:opacity-50"
+            type="button"
+            title="Pull calap0309 GitHub repos → projects"
+          >
+            {syncing ? "Syncing…" : "↻ Sync from GitHub"}
+          </button>
+          <button
+            onClick={openCreate}
+            className="btn w-full sm:w-auto"
+            type="button"
+          >
+            + New project
+          </button>
+        </div>
       </div>
 
       {error && (

@@ -1,0 +1,40 @@
+name: Sync GitHub → Portfolio
+
+on:
+  schedule:
+    - cron: "0 3 * * *" # daily 03:00 UTC
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - "src/lib/github-projects.ts"
+      - "scripts/sync-github.ts"
+      - "prisma/seed.ts"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    # Only run auto-sync on schedule or manual; push already builds via CI so we skip duplicate
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci
+
+      - name: Sync projects from GitHub
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: calap0309
+        run: npx tsx scripts/sync-github.ts
+
+      - name: Verify build still passes
+        run: npm run build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+

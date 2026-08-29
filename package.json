@@ -13,7 +13,9 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:reset": "prisma db push --force-reset && tsx prisma/seed.ts",
     "db:sqlite:setup": "DATABASE_URL=\"file:./dev.db\" prisma generate --schema prisma/schema.sqlite.prisma && DATABASE_URL=\"file:./dev.db\" prisma db push --schema prisma/schema.sqlite.prisma --force-reset",
-    "db:sqlite:seed": "DATABASE_URL=\"file:./dev.db\" tsx prisma/seed.ts"
+    "db:sqlite:seed": "DATABASE_URL=\"file:./dev.db\" tsx prisma/seed.ts",
+    "sync:github": "tsx scripts/sync-github.ts",
+    "sync:github:keep": "tsx scripts/sync-github.ts --keep-manual"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
