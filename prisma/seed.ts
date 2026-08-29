@@ -18,49 +18,86 @@ async function main() {
 
   const projects = [
     {
-      title: "EdgeCache",
-      slug: "edgecache",
+      title: "Poker Room",
+      slug: "poker-room",
       description:
-        "Global edge caching layer built on Cloudflare Workers. Handles 50k req/s with sub-millisecond latency. Implements stale-while-revalidate and automatic cache invalidation via WebSocket events.",
-      coverImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80",
-      liveUrl: "https://edgecache.dev",
-      githubUrl: "https://github.com/user/edgecache",
-      tags: JSON.stringify(["TypeScript", "Cloudflare Workers", "WebSockets", "Edge Computing"]),
+        "Texas Hold'em poker vs 3 bots — full betting flow (blinds, flop, turn, river, showdown), hand evaluator from high card to royal flush, and distinct bot personalities. Pure HTML/CSS/JS, no dependencies, deployed to GitHub Pages.",
+      coverImage: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=80",
+      liveUrl: "https://calap0309.github.io/poker-room/",
+      githubUrl: "https://github.com/calap0309/poker-room",
+      tags: JSON.stringify(["JavaScript", "Game", "Poker", "Canvas"]),
       featured: true,
     },
     {
-      title: "Stateflow",
-      slug: "stateflow",
+      title: "Event Horizon",
+      slug: "event-horizon",
       description:
-        "Reactive state management library with zero dependencies. Implements a finite state machine pattern with time-travel debugging, middleware support, and automatic React/Vue bindings via a shared event bus.",
-      coverImage: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80",
-      liveUrl: "https://stateflow.dev",
-      githubUrl: "https://github.com/user/stateflow",
-      tags: JSON.stringify(["TypeScript", "State Machines", "React", "Zero-Config"]),
+        "Real-time black hole in your browser — draggable spacetime that warps light via physics, with shader visuals and ambient audio. Built to make relativity tangible.",
+      coverImage: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=800&q=80",
+      liveUrl: "https://calap0309.github.io/event-horizon/",
+      githubUrl: "https://github.com/calap0309/event-horizon",
+      tags: JSON.stringify(["TypeScript", "Canvas", "Physics", "WebGL"]),
       featured: true,
     },
     {
-      title: "Pipeline",
-      slug: "pipeline",
+      title: "Blaze Anime",
+      slug: "blaze-anime",
       description:
-        "Self-hosted CI/CD runner with container isolation. Executes build stages in parallel across a DAG, streams real-time logs over SSE, and caches artifacts to a shared S3-compatible store.",
-      coverImage: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80",
-      liveUrl: "https://pipeline.dev",
-      githubUrl: "https://github.com/user/pipeline",
-      tags: JSON.stringify(["Go", "Docker", "SSE", "CI/CD"]),
+        "Crunchyroll-style anime catalog — browse, search, and watch licensed trailers with a fast, keyboard-friendly UI and clean metadata.",
+      coverImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80",
+      liveUrl: "",
+      githubUrl: "https://github.com/calap0309/blaze-anime",
+      tags: JSON.stringify(["JavaScript", "React", "Anime", "API"]),
       featured: true,
+    },
+    {
+      title: "Noctuary",
+      slug: "noctuary",
+      description:
+        "A quiet magazine — night covers, paper essays. Editorial layout built for reading, with soft typography and deliberate whitespace.",
+      coverImage: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=800&q=80",
+      liveUrl: "https://calap0309.github.io/noctuary/",
+      githubUrl: "https://github.com/calap0309/noctuary",
+      tags: JSON.stringify(["HTML", "CSS", "Editorial", "Magazine"]),
+      featured: false,
+    },
+    {
+      title: "Lumen Journal",
+      slug: "lumen-journal",
+      description:
+        "Quiet daily journal — mood + note + streak. Local-first, distraction-free, built for habit and reflection without accounts or tracking.",
+      coverImage: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80",
+      liveUrl: "https://calap0309.github.io/lumen-journal/",
+      githubUrl: "https://github.com/calap0309/lumen-journal",
+      tags: JSON.stringify(["JavaScript", "CSS", "Journal", "Local-First"]),
+      featured: false,
+    },
+    {
+      title: "Lumen Notes",
+      slug: "lumen-notes",
+      description:
+        "Distraction-free markdown notes in your browser — instant, offline, no database. Write, preview, and persist locally.",
+      coverImage: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&q=80",
+      liveUrl: "https://calap0309.github.io/lumen-notes/",
+      githubUrl: "https://github.com/calap0309/lumen-notes",
+      tags: JSON.stringify(["JavaScript", "Markdown", "Notes", "PWA"]),
+      featured: false,
     },
   ];
 
   for (const project of projects) {
     await prisma.project.upsert({
       where: { slug: project.slug },
-      update: project,
+      update: { ...project, userId: user.id },
       create: { ...project, userId: user.id },
     });
   }
 
-  console.log("Database seeded successfully.");
+  // remove old demo slugs if they exist and are not in the new list
+  const keep = projects.map((p) => p.slug);
+  await prisma.project.deleteMany({ where: { slug: { notIn: keep } } });
+
+  console.log(`Database seeded — ${projects.length} real projects (github: calap0309)`);
 }
 
 main()
