@@ -8,7 +8,16 @@ import { ArrowUpRight, Github } from "lucide-react";
 import type { Project } from "@/lib/types";
 import { parseTags } from "@/lib/utils";
 
-/** Cards shown per viewport width. Mobile shows 1 card + a 10px peek. */
+/**
+ * Cards shown per viewport width. Mobile shows 1 card + a small peek.
+ * Horizontal drag carousel (Section III).
+ *
+ * A single framer-motion `x` MotionValue owns the track position; this is the
+ * only source of truth (no native scroll, no scrollbar mirroring). Drag uses
+ * `drag="x"` with constraints and momentum; on release the nearest card eases
+ * to the viewport centre with a spring. Tabs / pagination dots / arrow keys
+ * trigger the same spring for a smooth, consistent (Apple-like) motion.
+ */
 type Breakpoint = { max: number; perView: number };
 
 const BREAKPOINTS: Breakpoint[] = [
@@ -24,19 +33,6 @@ interface ProjectCarouselProps {
   projects: Project[];
 }
 
-/**
- * Horizontal drag carousel (Section III).
- *
- * A single framer-motion `x` MotionValue owns the track position. Native
- * `scrollLeft` mirrors it so the standard scrollbar stays visible and keyboard
- * + pagination maths share one source of truth. Drag uses `drag="x"`,
- * `dragConstraints`, `dragElastic={0.1}`, `dragMomentum`; on release the
- * nearest card eases to the viewport centre. Cards-per-view, tap targets,
- * arrow-key control, edge fades and dots are all handled here.
- *
- * Styled to Apple: hairline tiles with layered shadow, image scales to 1.02 on
- * hover, and pagination dots are small gray circles with a blue active pill.
- */
 export function ProjectCarousel({ projects }: ProjectCarouselProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const x = useMotionValue(0);
@@ -62,7 +58,8 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
     setCardWidth(Math.max(0, (width - GAP * (perView - 1)) / perView));
   }, [resolvePerView]);
 
-  // Measure on mount + debounced rAF on resize.
+  // Measure on mount + debounced rAF on resize (overflow stays visible so the
+  // native scrollbar remains as a fallback for very long tracks).
   useEffect(() => {
     measure();
     let raf = 0;
@@ -80,6 +77,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
     };
   }, [measure]);
 
+  /** Max negative offset (px) before the last card reaches the viewport start. */
   const maxScroll = useMemo(
     () => Math.max(0, projects.length * (cardWidth + GAP) - GAP - containerWidth),
     [projects.length, cardWidth, containerWidth]
@@ -93,14 +91,17 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
     [cardWidth, projects.length]
   );
 
-  /** Animate the track (and native scroll) to a slide's centre offset. */
+  /** Spring the track to a slide's offset. Smooth + single source of truth. */
   const goTo = useCallback(
     (index: number) => {
       const target = offsetForIndex(index);
       setActiveIndex(index);
-      animate(x, -target, { type: "tween", duration: 0.4, ease: [0.22, 1, 0.36, 1] });
-      const el = containerRef.current;
-      if (el) el.scrollTo({ left: target, behavior: "smooth" });
+      animate(x, -target, {
+        type: "spring",
+        stiffness: 260,
+        damping: 30,
+        restDelta: 0.1,
+      });
     },
     [offsetForIndex, x]
   );
@@ -114,14 +115,6 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
     const idx = Math.round(-x.get() / (cardWidth + GAP));
     goTo(idx);
   }, [x, cardWidth, goTo]);
-
-  // Keep the native scrollbar in sync while dragging (touch + mouse).
-  const syncScroll = useCallback(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const raw = Math.min(Math.max(-x.get(), 0), el.scrollWidth - el.clientWidth);
-    if (Math.abs(el.scrollLeft - raw) > 1) el.scrollLeft = raw;
-  }, [x]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -146,26 +139,20 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
 
   return (
     <div className="relative w-full">
-      {/* Scroll region: keeps the native scrollbar (do NOT hide overflow),
-          allows vertical panning, and is focussable for arrow-key control.
-          Edge fades are positioned over this region; dots live below it. */}
+      {/* Scroll region (overflow stays visible for a fallback scrollbar) but the
+          track position is driven by framer-motion. Edge fades sit above it;
+          dots live below. */}
       <div
         ref={containerRef}
-        tabIndex={0}
-        role="region"
-        aria-roledescription="carousel"
-        aria-label="Project carousel"
-        onKeyDown={handleKeyDown}
-        className="carousel-pan relative -mx-1 overflow-x-auto px-1 pb-2 outline-none focus-visible:outline-2 focus-visible:outline-accent"
+        className="relative overflow-x-visible"
       >
         <motion.div
-          className="flex"
-          style={{ x, willChange: "transform" }}
+          className="flex will-change-transform"
+          style={{ x }}
           drag="x"
           dragConstraints={{ left: -maxScroll, right: 0 }}
           dragElastic={0.1}
           dragMomentum
-          onDrag={syncScroll}
           onDragEnd={handleDragEnd}
         >
           {projects.map((project, i) => (
@@ -182,13 +169,12 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
         </motion.div>
       </div>
 
-      {/* Edge fades — subtle, tap-through, blends with the page background
-          (theme-aware). Hidden below sm to not fight swipes. */}
+      {/* Edge fades — subtle, tap-through, blends with the page background. */}
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-12 bg-gradient-to-r from-appbg to-transparent sm:block" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-12 bg-gradient-to-l from-appbg to-transparent sm:block" />
 
-      {/* Pagination dots — full 44px tap area, gap-2. Inactive dots are small
-          gray circles; the active dot is a blue pill (Apple-style). */}
+      {/* Pagination dots — full 44px tap area. Inactive dots are small gray
+          circles; the active dot is a blue pill (Apple-style). */}
       <div className="mt-6 flex items-center justify-center gap-2">
         {projects.map((project, i) => (
           <button
@@ -203,8 +189,8 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
             <span
               className={
                 i === activeIndex
-                  ? "h-2 w-8 rounded-full bg-accent transition-colors duration-200"
-                  : "h-2 w-2 rounded-full bg-subtext/50 transition-colors duration-200 hover:bg-subtext"
+                  ? "h-2 w-8 rounded-full bg-accent transition-all duration-300 ease-apple"
+                  : "h-2 w-2 rounded-full bg-subtext/50 transition-all duration-300 ease-apple hover:bg-subtext"
               }
             />
           </button>
@@ -231,8 +217,7 @@ function Slide({
 }) {
   const tags = parseTags(project.tags);
 
-  // Use `useTransform` on the drag motion value to de-emphasise slides as they
-  // move away from the viewport centre. Drag-responsive, not reveal-on-scroll.
+  // De-emphasise slides as they move away from the viewport centre.
   const slideX = -index * (cardWidth + gap);
   const opacity = useTransform(x, (v) => {
     const dist = Math.abs(v - slideX);
