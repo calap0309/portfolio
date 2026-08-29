@@ -5,6 +5,7 @@ import Link from "next/link";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AdminProjects } from "./AdminProjects";
+import { AdminInbox } from "./AdminInbox";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -21,6 +22,10 @@ export default async function AdminPage() {
   }
 
   const projects = await prisma.project.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+
+  const messages = await prisma.message.findMany({
     orderBy: { createdAt: "desc" },
   });
 
@@ -51,21 +56,12 @@ export default async function AdminPage() {
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Stat label="Total projects" value={projects.length} />
         <Stat label="Featured" value={projects.filter((p) => p.featured).length} />
-        <Stat
-          label="Last updated"
-          value={
-            projects.length
-              ? new Intl.DateTimeFormat("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                }).format(projects[0].updatedAt)
-              : "—"
-          }
-        />
+        <Stat label="Inbox" value={messages.length} />
       </div>
 
       <AdminProjects initialProjects={projects} />
+
+      <AdminInbox initialMessages={messages} />
     </main>
   );
 }

@@ -30,3 +30,13 @@ export interface ContactFormData {
   subject: string;
   message: string;
 }
+
+export interface Message {
+  id: string;
+  name: string;
+  email: string | null;
+  subject: string;
+  message: string;
+  read: boolean;
+  createdAt: Date;
+}

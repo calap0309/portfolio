@@ -7,7 +7,7 @@ import { z } from "zod";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter your name."),
-  email: z.string().email("That email won't deliver."),
+  email: z.string().email("That email won't deliver.").optional().or(z.literal("")),
   subject: z.string().min(3, "Please add a subject."),
   message: z.string().min(20, "Please say a little more."),
 });
@@ -74,7 +74,7 @@ export function ContactForm() {
           htmlFor="email"
           className="mb-2 block text-sm font-semibold text-ink"
         >
-          Email
+          Email <span className="font-normal text-subtext">(optional)</span>
         </label>
         <input
           id="email"
@@ -125,6 +125,11 @@ export function ContactForm() {
       </div>
 
       <div className="pt-2">
+        <p className="mb-4 text-sm text-subtext">
+          Your message goes straight to me at{" "}
+          <span className="font-semibold text-ink">syaraffiras@gmail.com</span>.
+        </p>
+
         <button
           type="submit"
           disabled={status === "sending"}
