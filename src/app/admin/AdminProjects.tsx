@@ -9,6 +9,25 @@ import { z } from "zod";
 import type { Project } from "@/lib/types";
 import { parseTags, slugify } from "@/lib/utils";
 
+const httpsUrlField = z
+  .string()
+  .trim()
+  .max(2048)
+  .refine(
+    (v) => {
+      if (v === "") return true;
+      try {
+        const url = new URL(v);
+        return url.protocol === "https:";
+      } catch {
+        return false;
+      }
+    },
+    { message: "Must be a valid https:// URL" }
+  )
+  .or(z.literal(""))
+  .optional();
+
 const projectSchema = z.object({
   title: z.string().min(1, "Title required."),
   slug: z
@@ -16,9 +35,9 @@ const projectSchema = z.object({
     .min(1, "Slug required.")
     .regex(/^[a-z0-9-]+$/, "Lowercase, no spaces."),
   description: z.string().min(10, "Give a real description."),
-  coverImage: z.string().url("Must be a URL.").or(z.literal("")).optional(),
-  liveUrl: z.string().url("Must be a URL.").or(z.literal("")).optional(),
-  githubUrl: z.string().url("Must be a URL.").or(z.literal("")).optional(),
+  coverImage: httpsUrlField,
+  liveUrl: httpsUrlField,
+  githubUrl: httpsUrlField,
   tags: z.string(),
   featured: z.boolean(),
 });

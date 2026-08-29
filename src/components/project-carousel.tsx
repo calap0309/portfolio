@@ -94,8 +94,10 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
   /** Spring the track to a slide's offset. Smooth + single source of truth. */
   const goTo = useCallback(
     (index: number) => {
-      const target = offsetForIndex(index);
-      setActiveIndex(index);
+      if (!cardWidth) return;
+      const clamped = Math.min(Math.max(index, 0), projects.length - 1);
+      const target = offsetForIndex(clamped);
+      setActiveIndex(clamped);
       animate(x, -target, {
         type: "spring",
         stiffness: 260,
@@ -103,7 +105,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
         restDelta: 0.1,
       });
     },
-    [offsetForIndex, x]
+    [offsetForIndex, x, cardWidth, projects.length]
   );
 
   const goRelative = useCallback(
@@ -112,6 +114,7 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
   );
 
   const handleDragEnd = useCallback(() => {
+    if (!cardWidth) return;
     const idx = Math.round(-x.get() / (cardWidth + GAP));
     goTo(idx);
   }, [x, cardWidth, goTo]);
@@ -132,7 +135,8 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
   // Update dots while dragging so the nearest slide is highlighted live.
   useEffect(() => {
     return x.on("change", () => {
-      const idx = Math.round(-x.get() / (cardWidth + GAP || 1));
+      if (!cardWidth) return;
+      const idx = Math.round(-x.get() / (cardWidth + GAP));
       if (idx >= 0 && idx < projects.length) setActiveIndex(idx);
     });
   }, [x, cardWidth, projects.length]);
@@ -144,7 +148,12 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
           dots live below. */}
       <div
         ref={containerRef}
-        className="relative overflow-x-visible"
+        className="relative overflow-x-visible focus:outline-none"
+        tabIndex={0}
+        role="region"
+        aria-label="Project carousel"
+        aria-roledescription="carousel"
+        onKeyDown={handleKeyDown}
       >
         <motion.div
           className="flex will-change-transform"

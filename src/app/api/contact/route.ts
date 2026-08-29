@@ -1,17 +1,30 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const contactSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email().optional().or(z.literal("")),
-  subject: z.string().min(3),
-  message: z.string().min(20),
+  name: z.string().trim().min(2).max(100),
+  email: z.string().trim().email().optional().or(z.literal("")),
+  subject: z.string().trim().min(3).max(200),
+  message: z.string().trim().min(20).max(5000),
 });
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  const rate = checkRateLimit(request, { windowMs: 10 * 60 * 1000, limit: 5 });
+  if (!rate.allowed) {
+    const retryAfterSec = Math.ceil(rate.retryAfterMs / 1000);
+    return NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(retryAfterSec) },
+      }
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();

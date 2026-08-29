@@ -4,6 +4,25 @@ import { z } from "zod";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+const httpsUrlSchema = z
+  .string()
+  .trim()
+  .max(2048)
+  .refine(
+    (v) => {
+      if (v === "") return true;
+      try {
+        const url = new URL(v);
+        return url.protocol === "https:";
+      } catch {
+        return false;
+      }
+    },
+    { message: "URL must be a valid https:// URL" }
+  )
+  .optional()
+  .or(z.literal(""));
+
 const projectSchema = z.object({
   title: z.string().min(1),
   slug: z
@@ -11,9 +30,9 @@ const projectSchema = z.object({
     .min(1)
     .regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with dashes."),
   description: z.string().min(10),
-  coverImage: z.string().url().optional().or(z.literal("")),
-  liveUrl: z.string().url().optional().or(z.literal("")),
-  githubUrl: z.string().url().optional().or(z.literal("")),
+  coverImage: httpsUrlSchema,
+  liveUrl: httpsUrlSchema,
+  githubUrl: httpsUrlSchema,
   tags: z.array(z.string()).default([]),
   featured: z.boolean().default(false),
 });

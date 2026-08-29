@@ -6,10 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 const contactSchema = z.object({
-  name: z.string().min(2, "Please enter your name."),
-  email: z.string().email("That email won't deliver.").optional().or(z.literal("")),
-  subject: z.string().min(3, "Please add a subject."),
-  message: z.string().min(20, "Please say a little more."),
+  name: z.string().trim().min(2, "Please enter your name.").max(100, "Name is too long (max 100)."),
+  email: z.string().trim().email("That email won't deliver.").optional().or(z.literal("")),
+  subject: z.string().trim().min(3, "Please add a subject.").max(200, "Subject is too long (max 200)."),
+  message: z.string().trim().min(20, "Please say a little more.").max(5000, "Message is too long (max 5000)."),
 });
 
 type ContactFormValues = z.input<typeof contactSchema>;

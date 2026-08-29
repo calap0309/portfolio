@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { z } from "zod";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+
+const patchSchema = z.object({
+  read: z.boolean(),
+});
 
 export const runtime = "nodejs";
 
@@ -15,11 +20,25 @@ export async function PATCH(
   }
 
   const { id } = await params;
+  let body: unknown;
   try {
-    const body = (await request.json()) as { read?: boolean };
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
+  }
+
+  const parsed = patchSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Validation failed: read (boolean) is required." },
+      { status: 400 }
+    );
+  }
+
+  try {
     const updated = await prisma.message.update({
       where: { id },
-      data: { read: body.read ?? false },
+      data: { read: parsed.data.read },
     });
     return NextResponse.json({ ok: true, read: updated.read });
   } catch {
