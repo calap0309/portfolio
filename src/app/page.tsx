@@ -96,6 +96,101 @@ export default async function HomePage() {
           </Reveal>
         </section>
 
+        {/* About — bio + skills + experience, Apple 12-col */}
+        <section className="mx-auto max-w-grid py-16">
+          <Reveal>
+            <div className="row gap-8 hairline-top pt-12">
+              <div className="col-span-12 md:col-span-5">
+                <p className="text-[0.8125rem] font-semibold uppercase tracking-widest text-subtext">
+                  About
+                </p>
+                <h2 className="mt-2 max-w-[14ch] text-[clamp(1.75rem,4vw,2.25rem)] font-bold leading-tight tracking-tight2">
+                  Engineer who ships. Systems that last.
+                </h2>
+                <p className="mt-4 max-w-[42ch] text-subtext">
+                  4+ years building for the web — from edge caches handling 50k
+                  req/s to zero-dep state libraries. I care about correctness,
+                  speed, and DX. Based in Jakarta, working worldwide.
+                </p>
+                <div className="mt-8 grid grid-cols-3 gap-4 border-t border-hairline/60 pt-6">
+                  {[
+                    { k: "4+", v: "Years shipping" },
+                    { k: "15+", v: "Prod systems" },
+                    { k: "50k", v: "Req/s handled" },
+                  ].map((s) => (
+                    <div key={s.k}>
+                      <p className="text-2xl font-bold tracking-tight2">{s.k}</p>
+                      <p className="text-[0.6875rem] font-medium uppercase tracking-wider text-subtext">{s.v}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-8 flex gap-3">
+                  <Link href="/contact" className="btn btn-ghost">
+                    Let&apos;s talk
+                  </Link>
+                  <Link
+                    href="https://github.com/calap0309"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-[2.75rem] items-center gap-1.5 rounded-full border hairline px-5 text-[0.875rem] font-semibold text-ink transition-colors hover:bg-surface-soft"
+                  >
+                    GitHub <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+
+              <div className="col-span-12 md:col-span-7">
+                <div className="rounded-2xl border hairline bg-surface p-6 shadow-card sm:p-8">
+                  <h3 className="text-[0.8125rem] font-semibold uppercase tracking-widest text-subtext">Stack</h3>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {[
+                      "TypeScript",
+                      "Next.js",
+                      "React",
+                      "Node.js",
+                      "Prisma",
+                      "PostgreSQL",
+                      "Tailwind",
+                      "Framer Motion",
+                      "WebSockets",
+                      "SSE",
+                      "Cloudflare Workers",
+                      "Docker",
+                      "Go",
+                    ].map((t) => (
+                      <span key={t} className="rounded-full bg-surface-tag px-3 py-1.5 text-xs font-medium text-ink">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <h3 className="mt-8 text-[0.8125rem] font-semibold uppercase tracking-widest text-subtext">Experience</h3>
+                  <div className="mt-4 space-y-4">
+                    {[
+                      { role: "Full-Stack Engineer", org: "Freelance", time: "2022 — Now", desc: "Realtime systems, edge infra, dashboards. Clients worldwide." },
+                      { role: "Frontend Engineer", org: "Product Studio", time: "2020 — 2022", desc: "Design systems, state architectures, performance." },
+                    ].map((e) => (
+                      <div key={e.role} className="flex gap-4 border-l-2 border-hairline pl-4 transition-colors hover:border-accent">
+                        <div className="flex-1">
+                          <p className="text-[0.9375rem] font-semibold text-ink">
+                            {e.role} <span className="font-normal text-subtext">· {e.org}</span>
+                          </p>
+                          <p className="text-[0.8125rem] text-subtext">{e.time} — {e.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-8 rounded-xl bg-surface-soft p-4">
+                    <p className="text-[0.8125rem] font-semibold text-ink">Currently exploring</p>
+                    <p className="mt-1 text-[0.8125rem] text-subtext">CRDTs, edge SQLite, and local-first collaboration.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </section>
+
         {/* Selected Work — billed grid, cards staggered (Apple centered
             asymmetry), each revealed on scroll with a gentle fade-up. */}
         <section className="mx-auto max-w-grid py-16">
