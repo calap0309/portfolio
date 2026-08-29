@@ -13,6 +13,7 @@
     --hairline: 210 210 215;
     --heroglow: 245 245 247;
     --danger: 215 0 21;
+    --topwash: radial-gradient(ellipse 90% 70% at 50% 0%, rgb(var(--heroglow) / 0.9) 0%, rgb(var(--appbg) / 0) 75%);
     --surface: 255 255 255;
     --surface-soft: 245 245 247;
     --surface-tag: 250 250 250;
@@ -28,6 +29,21 @@
     --hairline: 44 44 46;
     --heroglow: 14 14 16;
     --danger: 255 96 92;
+    --topwash: radial-gradient(
+        ellipse 90% 70% at 50% 0%,
+        rgb(var(--heroglow) / 0.55) 0%,
+        rgb(var(--appbg) / 0) 70%
+      ),
+      radial-gradient(
+        ellipse 50% 45% at 18% -5%,
+        rgb(var(--accent) / 0.14) 0%,
+        rgb(var(--accent) / 0) 60%
+      ),
+      radial-gradient(
+        ellipse 50% 45% at 82% -5%,
+        rgb(124 77 255 / 0.1) 0%,
+        rgb(124 77 255 / 0) 60%
+      );
     --surface: 29 29 31;
     --surface-soft: 44 44 46;
     --surface-tag: 56 56 58;

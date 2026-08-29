@@ -16,13 +16,13 @@ import { type ReactNode } from "react";
 export function Background({ children }: { children: ReactNode }) {
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Soft radial hero glow — barely perceptible, adds depth. */}
+      {/* Soft radial hero glow — barely perceptible, adds depth. On dark theme
+          it stays very subtle so it reads as ambient light, not a gray box. */}
       <div
         aria-hidden
         className="pointer-events-none fixed inset-x-0 top-0 z-0 h-[60vh]"
         style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, rgb(var(--heroglow)) 0%, rgb(var(--appbg) / 0) 70%)",
+          background: "var(--topwash)",
         }}
       />
 
