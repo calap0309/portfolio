@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { NavClient } from "./nav-client";
 import { ThemeToggle } from "./theme-toggle";
+import { NavScrollWrapper } from "./nav-scroll-wrapper";
 
 /**
  * Server wrapper: resolves the auth session server-side and hands a plain
@@ -15,17 +16,20 @@ export async function Nav() {
   const isAdmin = Boolean(session?.user);
 
   return (
-    <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl hairline-b print:hidden dark:bg-[linear-gradient(180deg,rgb(24_33_51/0.9),rgb(29_29_31/0.9))]">
-      <div className="row items-center py-3">
+    <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl hairline-b print:hidden supports-[backdrop-filter]:bg-surface/70 dark:bg-[linear-gradient(180deg,rgb(24_33_51/0.9),rgb(29_29_31/0.9))]">
+      <NavScrollWrapper>
         <div className="col-span-6 md:col-span-3">
           <Link
             href="/"
             className="group inline-flex items-center gap-1.5 text-[1rem] font-bold tracking-tight2 text-ink"
             aria-label="Calap — home"
           >
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-ink text-[0.75rem] font-bold text-white dark:bg-white dark:text-ink">
+              C
+            </span>
             Calap
             <span
-              className="inline-block h-1 w-1 rounded-full bg-accent transition-transform duration-300 ease-apple group-hover:scale-150"
+              className="inline-block h-1 w-1 rounded-full bg-accent transition-transform duration-300 ease-apple group-hover:scale-[1.8]"
               aria-hidden
             />
           </Link>
@@ -42,7 +46,7 @@ export async function Nav() {
           <ThemeToggle />
           <NavClient isAdmin={isAdmin} />
         </div>
-      </div>
+      </NavScrollWrapper>
     </header>
   );
 }

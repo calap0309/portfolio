@@ -17,7 +17,7 @@ export function Background({ children }: { children: ReactNode }) {
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
       {/* Soft radial hero glow — barely perceptible, adds depth. On dark theme
-          it stays very subtle so it reads as ambient light, not a gray box. */}
+           it stays very subtle so it reads as ambient light, not a gray box. */}
       <div
         aria-hidden
         className="pointer-events-none fixed inset-x-0 top-0 z-0 h-[60vh]"
@@ -27,8 +27,8 @@ export function Background({ children }: { children: ReactNode }) {
       />
 
       {/* Single ultra-soft static blue blob — hero region only, 5% opacity.
-          Rounded-full so it stays a soft circle even if the blur filter fails
-          to render on some devices (otherwise it shows as a sharp square). */}
+           Rounded-full so it stays a soft circle even if the blur filter fails
+           to render on some devices (otherwise it shows as a sharp square). */}
       <div
         aria-hidden
         className="pointer-events-none fixed -top-40 left-1/2 z-0 h-[38rem] w-[38rem] -translate-x-1/2 rounded-full sm:h-[44rem] sm:w-[44rem]"
@@ -36,6 +36,26 @@ export function Background({ children }: { children: ReactNode }) {
           background:
             "radial-gradient(circle at center, rgba(0,113,227,0.05) 0%, rgba(0,113,227,0) 70%)",
           filter: "blur(var(--blob-blur, 150px))",
+        }}
+      />
+
+      {/* NEW: second subtle blob for depth — only visible in dark mode via opacity trick,
+          light mode keeps it nearly invisible. Adds layered feel without breaking Apple minimalism. */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed -top-20 right-[10%] z-0 hidden h-[28rem] w-[28rem] rounded-full opacity-[0.015] blur-[100px] dark:opacity-[0.08] sm:block"
+        style={{
+          background: "radial-gradient(circle at center, #7c4dff 0%, transparent 70%)",
+        }}
+      />
+
+      {/* NEW: ultra-fine grid texture — 1px dots at 3% opacity, Apple.com subtle. */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-0 opacity-[0.015] dark:opacity-[0.02]"
+        style={{
+          backgroundImage: "radial-gradient(circle at 1px 1px, rgb(0 0 0) 1px, transparent 0)",
+          backgroundSize: "32px 32px",
         }}
       />
 

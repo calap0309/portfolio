@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Background } from "./background";
+import { ScrollProgress } from "@/components/scroll-progress";
 
 export const metadata: Metadata = {
   title: {
@@ -57,6 +58,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="min-h-screen antialiased pt-safe pb-safe">
+        <ScrollProgress />
         <Background>
           <div id="top" className="mx-auto w-full max-w-6xl px-6 md:px-10">
             {children}

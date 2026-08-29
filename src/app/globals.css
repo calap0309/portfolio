@@ -262,8 +262,106 @@ body {
   outline-offset: 2px;
 }
 
+/* ——— Visual & UX Polish ——— */
+
+/* Apple-thin custom scrollbar (desktop only) */
+@media (hover: hover) and (pointer: fine) {
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgb(var(--hairline));
+    border-radius: 9999px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--subtext) / 0.5);
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--hairline)) transparent;
+}
+
+/* Card shine sweep — light glides over card on hover */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+.card-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgb(255 255 255 / 0.7) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.7s ease-apple;
+  pointer-events: none;
+  opacity: 0;
+}
+.group:hover .card-shine::after,
+.card-shine:hover::after {
+  transform: translateX(100%);
+  opacity: 1;
+}
+.dark .card-shine::after {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgb(255 255 255 / 0.08) 50%,
+    transparent 60%
+  );
+}
+
+/* Gradient text for hero accent word */
+.text-gradient {
+  background: linear-gradient(90deg, rgb(var(--accent)) 0%, rgb(124 77 255) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.dark .text-gradient {
+  background: linear-gradient(90deg, rgb(var(--accent)) 0%, rgb(160 130 255) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Nav scrolled shadow */
+.nav-scrolled {
+  box-shadow: 0 1px 0 rgb(var(--hairline) / 0.8), 0 8px 24px rgb(0 0 0 / 0.06);
+}
+.dark .nav-scrolled {
+  box-shadow: 0 1px 0 rgb(var(--hairline) / 1), 0 8px 24px rgb(0 0 0 / 0.4);
+}
+
+/* Subtle floating for hero badge */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-float { animation: none; }
+}
+
+/* Tilt helper */
+.tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease-apple;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
+  .card-shine::after { display: none; }
 }
