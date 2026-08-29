@@ -189,8 +189,8 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
             <span
               className={
                 i === activeIndex
-                  ? "h-2 w-8 rounded-full bg-accent transition-all duration-300 ease-apple"
-                  : "h-2 w-2 rounded-full bg-subtext/50 transition-all duration-300 ease-apple hover:bg-subtext"
+                  ? "h-2 w-2 rounded-full bg-accent transition-colors duration-300 ease-apple"
+                  : "h-2 w-2 rounded-full bg-subtext/50 transition-colors duration-300 ease-apple hover:bg-subtext"
               }
             />
           </button>
