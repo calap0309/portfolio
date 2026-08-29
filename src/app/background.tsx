@@ -26,10 +26,12 @@ export function Background({ children }: { children: ReactNode }) {
         }}
       />
 
-      {/* Single ultra-soft static blue blob — hero region only, 5% opacity. */}
+      {/* Single ultra-soft static blue blob — hero region only, 5% opacity.
+          Rounded-full so it stays a soft circle even if the blur filter fails
+          to render on some devices (otherwise it shows as a sharp square). */}
       <div
         aria-hidden
-        className="pointer-events-none fixed -top-40 left-1/2 z-0 h-[38rem] w-[38rem] -translate-x-1/2 sm:h-[44rem] sm:w-[44rem]"
+        className="pointer-events-none fixed -top-40 left-1/2 z-0 h-[38rem] w-[38rem] -translate-x-1/2 rounded-full sm:h-[44rem] sm:w-[44rem]"
         style={{
           background:
             "radial-gradient(circle at center, rgba(0,113,227,0.05) 0%, rgba(0,113,227,0) 70%)",
