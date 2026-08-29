@@ -30,19 +30,24 @@
     --heroglow: 14 14 16;
     --danger: 255 96 92;
     --topwash: radial-gradient(
-        ellipse 90% 70% at 50% 0%,
+        ellipse 90% 75% at 50% 0%,
         rgb(var(--appbg) / 1) 0%,
-        rgb(var(--appbg) / 0) 75%
+        rgb(var(--appbg) / 0) 80%
       ),
       radial-gradient(
-        ellipse 60% 50% at 22% -10%,
-        rgb(var(--accent) / 0.4) 0%,
-        rgb(var(--accent) / 0) 58%
+        ellipse 70% 55% at 18% -12%,
+        rgb(var(--accent) / 0.55) 0%,
+        rgb(var(--accent) / 0) 60%
       ),
       radial-gradient(
-        ellipse 60% 50% at 80% -10%,
-        rgb(124 77 255 / 0.32) 0%,
-        rgb(124 77 255 / 0) 58%
+        ellipse 70% 55% at 84% -12%,
+        rgb(124 77 255 / 0.45) 0%,
+        rgb(124 77 255 / 0) 60%
+      ),
+      radial-gradient(
+        ellipse 55% 45% at 50% -18%,
+        rgb(var(--accent) / 0.28) 0%,
+        rgb(var(--accent) / 0) 65%
       );
     --surface: 29 29 31;
     --surface-soft: 44 44 46;
