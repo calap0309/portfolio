@@ -39,20 +39,19 @@ export function Background({ children }: { children: ReactNode }) {
         }}
       />
 
-      {/* NEW: second subtle blob for depth — only visible in dark mode via opacity trick,
-          light mode keeps it nearly invisible. Adds layered feel without breaking Apple minimalism. */}
+      {/* Second subtle blob — soft purple depth, barely visible in light, ambient in dark. */}
       <div
         aria-hidden
-        className="pointer-events-none fixed -top-20 right-[10%] z-0 hidden h-[28rem] w-[28rem] rounded-full opacity-[0.015] blur-[100px] dark:opacity-[0.08] sm:block"
+        className="pointer-events-none fixed -top-20 right-[10%] z-0 hidden h-[28rem] w-[28rem] rounded-full opacity-[0.025] blur-[100px] dark:opacity-[0.06] sm:block"
         style={{
           background: "radial-gradient(circle at center, #7c4dff 0%, transparent 70%)",
         }}
       />
 
-      {/* NEW: ultra-fine grid texture — 1px dots at 3% opacity, Apple.com subtle. */}
+      {/* Ultra-fine grid texture — 1px dots, Apple.com subtle, slightly more visible for depth. */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-0 opacity-[0.015] dark:opacity-[0.02]"
+        className="pointer-events-none fixed inset-0 z-0 opacity-[0.02] dark:opacity-[0.025]"
         style={{
           backgroundImage: "radial-gradient(circle at 1px 1px, rgb(0 0 0) 1px, transparent 0)",
           backgroundSize: "32px 32px",

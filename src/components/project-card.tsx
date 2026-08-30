@@ -27,7 +27,7 @@ export function ProjectCard({
         wide ? "md:col-span-8 md:col-start-3" : "md:col-span-5"
       } ${wide ? "md:mt-10" : "md:mt-14"}`}
     >
-      {/* Cover — image zooms gently on hover (1.02 over 0.3s). */}
+      {/* Cover — image zooms gently on hover (1.02 over 0.3s, Apple spec). */}
       <div className="card-shine relative aspect-[16/10] overflow-hidden bg-surface-soft">
         {project.coverImage && (
           <Image
@@ -35,7 +35,7 @@ export function ProjectCard({
             alt={project.title}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover transition-transform duration-700 ease-apple group-hover:scale-[1.06]"
+            className="object-cover transition-transform duration-300 ease-apple group-hover:scale-[1.02]"
             priority={wide}
           />
         )}

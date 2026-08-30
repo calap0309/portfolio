@@ -16,7 +16,7 @@ export async function Nav() {
   const isAdmin = Boolean(session?.user);
 
   return (
-    <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl hairline-b print:hidden supports-[backdrop-filter]:bg-surface/70 dark:bg-[linear-gradient(180deg,rgb(24_33_51/0.9),rgb(29_29_31/0.9))]">
+    <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl hairline-b print:hidden supports-[backdrop-filter]:bg-surface/70 dark:bg-surface/80">
       <NavScrollWrapper>
         <div className="col-span-6 md:col-span-3">
           <Link

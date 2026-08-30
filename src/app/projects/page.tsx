@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Layers } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -43,8 +45,15 @@ export default async function ProjectsPage() {
 
         <div className="mt-12 md:mt-16">
           {projects.length === 0 ? (
-            <div className="rounded-2xl hairline bg-surface-soft p-14 text-center text-subtext">
-              No projects published yet.
+            <div className="rounded-2xl border hairline bg-surface p-10 text-center shadow-sm sm:p-14">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-soft text-subtext">
+                <Layers className="h-6 w-6" />
+              </div>
+              <p className="mt-4 font-semibold text-ink">No projects yet</p>
+              <p className="mx-auto mt-1 max-w-sm text-sm text-subtext">Projects will appear here once published.</p>
+              <Link href="/contact" className="btn btn-ghost mt-6 inline-flex">
+                Get in touch
+              </Link>
             </div>
           ) : (
             <ProjectCarousel projects={projects} />

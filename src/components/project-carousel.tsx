@@ -183,13 +183,13 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-12 bg-gradient-to-l from-appbg to-transparent sm:block" />
 
       {/* Pagination dots — full 44px tap area. Inactive dots are small gray
-          circles; the active dot is a blue pill (Apple-style). */}
-      <div className="mt-6 flex items-center justify-center gap-2">
+           circles; the active dot is a blue pill (Apple-style, 24px wide). */}
+      <div className="mt-6 flex items-center justify-center gap-1.5">
         {projects.map((project, i) => (
           <button
             key={project.id}
             type="button"
-            aria-label={`Go to slide ${i + 1}`}
+            aria-label={`Go to slide ${i + 1} of ${projects.length}`}
             aria-current={i === activeIndex ? "true" : undefined}
             onClick={() => goTo(i)}
             className="flex items-center justify-center"
@@ -198,8 +198,8 @@ export function ProjectCarousel({ projects }: ProjectCarouselProps) {
             <span
               className={
                 i === activeIndex
-                  ? "h-2 w-2 rounded-full bg-accent transition-colors duration-300 ease-apple"
-                  : "h-2 w-2 rounded-full bg-subtext/50 transition-colors duration-300 ease-apple hover:bg-subtext"
+                  ? "h-2 w-6 rounded-full bg-accent transition-all duration-300 ease-apple"
+                  : "h-2 w-2 rounded-full bg-subtext/30 transition-all duration-300 ease-apple hover:bg-subtext/60"
               }
             />
           </button>
@@ -263,21 +263,21 @@ function Slide({
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full hairline bg-surface-soft px-3 py-1 text-xs font-medium text-subtext"
+                className="rounded-full bg-surface-tag px-3 py-1.5 text-xs font-medium text-subtext transition-colors duration-200 hover:bg-surface-soft hover:text-ink"
               >
                 {tag}
               </span>
             ))}
           </div>
-          <div className="flex items-center gap-6 pt-2">
+          <div className="flex items-center gap-4 pt-2">
             {project.liveUrl && (
               <Link
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-[2.75rem] items-center gap-1 text-[0.875rem] font-semibold text-accent transition-colors hover:text-accent-hover"
+                className="group/link inline-flex min-h-[2.75rem] items-center gap-1.5 rounded-full border border-accent/15 bg-accent/5 px-4 text-[0.875rem] font-semibold text-accent transition-all hover:bg-accent hover:text-white"
               >
-                Visit <ArrowUpRight className="h-4 w-4" />
+                Visit <ArrowUpRight className="h-4 w-4 transition-transform duration-300 ease-apple group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
               </Link>
             )}
             {project.githubUrl && (
@@ -285,7 +285,7 @@ function Slide({
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-[2.75rem] items-center gap-1 text-[0.875rem] font-semibold text-accent transition-colors hover:text-accent-hover"
+                className="group/link inline-flex min-h-[2.75rem] items-center gap-1.5 text-[0.875rem] font-semibold text-subtext transition-colors hover:text-ink"
               >
                 <Github className="h-4 w-4" /> Source
               </Link>

@@ -27,15 +27,15 @@ export default async function HomePage() {
         {/* Apple-style hero — generous whitespace, tight-tracked headline,
             near-black ink, blue CTA. Content is capped at 980px for text. */}
         <section
-          className="mx-auto max-w-text px-0 text-center"
-          style={{ paddingTop: "clamp(5.5rem, 15vh, 13rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}
+          className="mx-auto max-w-text px-4 text-center sm:px-0"
+          style={{ paddingTop: "clamp(5rem, 14vh, 11rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}
         >
           <Reveal>
             <div className="row">
               <div className="col-span-12">
-                <span className="animate-float inline-flex items-center gap-2 rounded-full border-hairline border bg-surface/60 px-4 py-1.5 text-[0.8125rem] font-medium text-subtext shadow-sm backdrop-blur-md">
+                <span className="animate-float inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/70 px-4 py-1.5 text-[0.8125rem] font-medium text-subtext shadow-sm backdrop-blur-md">
                   <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75 [animation-duration:2s]" />
                     <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
                   </span>
                   Available for freelance
@@ -82,9 +82,9 @@ export default async function HomePage() {
                     { icon: Layers, label: "Systems", sub: "Scale-tested" },
                     { icon: Code2, label: "Tooling", sub: "DX-first" },
                   ].map((item) => (
-                    <div key={item.label} className="text-center">
-                      <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-surface-soft text-accent">
-                        <item.icon className="h-4.5 w-4.5" />
+                    <div key={item.label} className="group text-center">
+                      <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-surface-soft text-accent transition-colors duration-200 group-hover:bg-accent group-hover:text-white">
+                        <item.icon className="h-[18px] w-[18px]" />
                       </div>
                       <p className="mt-3 text-[0.8125rem] font-semibold text-ink">{item.label}</p>
                       <p className="text-[0.6875rem] font-medium uppercase tracking-wider text-subtext">{item.sub}</p>
@@ -118,8 +118,8 @@ export default async function HomePage() {
                     { k: "15+", v: "Prod systems" },
                     { k: "50k", v: "Req/s handled" },
                   ].map((s) => (
-                    <div key={s.k}>
-                      <p className="text-2xl font-bold tracking-tight2">{s.k}</p>
+                    <div key={s.k} className="group">
+                      <p className="text-2xl font-bold tracking-tight2 transition-colors group-hover:text-accent">{s.k}</p>
                       <p className="text-[0.6875rem] font-medium uppercase tracking-wider text-subtext">{s.v}</p>
                     </div>
                   ))}
@@ -158,7 +158,7 @@ export default async function HomePage() {
                       "Docker",
                       "Go",
                     ].map((t) => (
-                      <span key={t} className="rounded-full bg-surface-tag px-3 py-1.5 text-xs font-medium text-ink">
+                      <span key={t} className="rounded-full bg-surface-tag px-3 py-1.5 text-xs font-medium text-ink transition-colors duration-200 hover:bg-surface-soft hover:text-accent">
                         {t}
                       </span>
                     ))}
@@ -218,9 +218,15 @@ export default async function HomePage() {
 
           <div className="row mt-16 gap-x-6 gap-y-6">
             {projects.length === 0 ? (
-              <div className="col-span-12 rounded-2xl border hairline bg-surface-soft p-14 text-center">
-                <p className="text-subtext">No featured projects yet — check back soon.</p>
-                <Link href="/projects" className="link mt-3 inline-flex">Browse all work →</Link>
+              <div className="col-span-12 rounded-2xl border hairline bg-surface p-10 text-center shadow-sm sm:p-14">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-soft text-subtext">
+                  <Layers className="h-6 w-6" />
+                </div>
+                <p className="mt-4 font-semibold text-ink">No featured projects yet</p>
+                <p className="mx-auto mt-1 max-w-sm text-sm text-subtext">Check back soon — new work is being curated.</p>
+                <Link href="/projects" className="btn btn-ghost mt-6 inline-flex">
+                  Browse all work
+                </Link>
               </div>
             ) : (
               projects.map((project, i) => (

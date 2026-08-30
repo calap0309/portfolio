@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 const contactSchema = z.object({
   name: z.string().trim().min(2, "Please enter your name.").max(100, "Name is too long (max 100)."),
@@ -49,104 +50,120 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-10 grid gap-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-10 grid gap-5" noValidate>
       <div>
-        <label
-          htmlFor="name"
-          className="mb-2 block text-sm font-semibold text-ink"
-        >
+        <label htmlFor="name" className="mb-2 block text-sm font-semibold text-ink">
           Name
         </label>
         <input
           id="name"
           type="text"
+          placeholder="Ada Lovelace"
+          aria-invalid={Boolean(errors.name)}
+          aria-describedby={errors.name ? "name-error" : undefined}
           {...register("name")}
-          className="input-field"
+          className={`input-field ${errors.name ? "border-danger focus:border-danger" : ""}`}
           autoComplete="name"
         />
         {errors.name && (
-          <p className="mt-1 text-xs text-danger">{errors.name.message}</p>
+          <p id="name-error" className="mt-1.5 flex items-center gap-1 text-xs font-medium text-danger">
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" /> {errors.name.message}
+          </p>
         )}
       </div>
 
       <div>
-        <label
-          htmlFor="email"
-          className="mb-2 block text-sm font-semibold text-ink"
-        >
+        <label htmlFor="email" className="mb-2 block text-sm font-semibold text-ink">
           Email <span className="font-normal text-subtext">(optional)</span>
         </label>
         <input
           id="email"
           type="email"
+          placeholder="ada@analytical.engine"
+          aria-invalid={Boolean(errors.email)}
+          aria-describedby={errors.email ? "email-error" : undefined}
           {...register("email")}
-          className="input-field"
+          className={`input-field ${errors.email ? "border-danger focus:border-danger" : ""}`}
           autoComplete="email"
         />
         {errors.email && (
-          <p className="mt-1 text-xs text-danger">{errors.email.message}</p>
+          <p id="email-error" className="mt-1.5 flex items-center gap-1 text-xs font-medium text-danger">
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" /> {errors.email.message}
+          </p>
         )}
       </div>
 
       <div>
-        <label
-          htmlFor="subject"
-          className="mb-2 block text-sm font-semibold text-ink"
-        >
+        <label htmlFor="subject" className="mb-2 block text-sm font-semibold text-ink">
           Subject
         </label>
         <input
           id="subject"
           type="text"
+          placeholder="Project inquiry — realtime dashboard"
+          aria-invalid={Boolean(errors.subject)}
+          aria-describedby={errors.subject ? "subject-error" : undefined}
           {...register("subject")}
-          className="input-field"
+          className={`input-field ${errors.subject ? "border-danger focus:border-danger" : ""}`}
         />
         {errors.subject && (
-          <p className="mt-1 text-xs text-danger">{errors.subject.message}</p>
+          <p id="subject-error" className="mt-1.5 flex items-center gap-1 text-xs font-medium text-danger">
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" /> {errors.subject.message}
+          </p>
         )}
       </div>
 
       <div>
-        <label
-          htmlFor="message"
-          className="mb-2 block text-sm font-semibold text-ink"
-        >
+        <label htmlFor="message" className="mb-2 block text-sm font-semibold text-ink">
           Message
         </label>
         <textarea
           id="message"
           rows={6}
+          placeholder="Tell me about the problem, stack, and timeline…"
+          aria-invalid={Boolean(errors.message)}
+          aria-describedby={errors.message ? "message-error" : undefined}
           {...register("message")}
-          className="input-field resize-y"
+          className={`input-field resize-y py-3 ${errors.message ? "border-danger focus:border-danger" : ""}`}
         />
         {errors.message && (
-          <p className="mt-1 text-xs text-danger">{errors.message.message}</p>
+          <p id="message-error" className="mt-1.5 flex items-center gap-1 text-xs font-medium text-danger">
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" /> {errors.message.message}
+          </p>
         )}
+        <p className="mt-1.5 text-right text-[0.6875rem] text-subtext/70">Min. 20 characters</p>
       </div>
 
       <div className="pt-2">
         <p className="mb-4 text-sm text-subtext">
-          Your message goes straight to me at{" "}
-          <span className="font-semibold text-ink">syaraffiras@gmail.com</span>.
+          Your message goes straight to me at <span className="font-semibold text-ink">syaraffiras@gmail.com</span>.
         </p>
 
         <button
           type="submit"
           disabled={status === "sending"}
-          className="btn w-full disabled:opacity-50 sm:w-auto"
+          className="btn inline-flex w-full items-center justify-center gap-2 disabled:opacity-50 sm:w-auto"
         >
-          {status === "sending" ? "Sending…" : "Send message"}
+          {status === "sending" ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" /> Sending…
+            </>
+          ) : (
+            "Send message"
+          )}
         </button>
 
         {status === "sent" && (
-          <p className="mt-4 rounded-xl bg-surface-soft px-4 py-3 text-sm text-ink">
-            Message sent. I&apos;ll reply within 24 hours.
-          </p>
+          <div className="mt-4 flex items-start gap-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-900/50 dark:bg-green-950/30 dark:text-green-200">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>Message sent — I&apos;ll reply within 24 hours.</span>
+          </div>
         )}
         {status === "error" && (
-          <p className="mt-4 rounded-xl bg-surface-soft px-4 py-3 text-sm text-ink">
-            Delivery failed. Please email me directly instead.
-          </p>
+          <div className="mt-4 flex items-start gap-3 rounded-xl border border-danger/20 bg-danger/5 px-4 py-3 text-sm text-ink dark:bg-danger/10">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-danger" />
+            <span>Delivery failed. Please email me directly at syaraffiras@gmail.com instead.</span>
+          </div>
         )}
       </div>
     </form>
