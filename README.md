@@ -6,7 +6,7 @@
 
 Calap's personal developer portfolio — a production-ready app built with **Next.js 15 (App Router)**, **TypeScript (strict, zero `any`)**, **Tailwind CSS**, **shadcn/ui** primitives, **Prisma**, and **PostgreSQL** (with an easy **SQLite** fallback for local dev).
 
-The design is **Apple-inspired**: clean, typography-driven, spacious, and minimal. Pure white base, near-black ink `#1d1d1f`, Apple blue `#0071e3`, medium gray `#86868b` secondary text, and `#d2d2d7` 0.5px hairlines — emulating the apple.com aesthetic. **No gradients (except subtle hero glows), no glassmorphism, no particle effects, no dark mode by default.**
+The design is **Apple-inspired**: clean, typography-driven, spacious, and minimal. Pure white base, near-black ink `#1d1d1f`, Apple blue `#0071e3`, medium gray `#86868b` secondary text, and `#d2d2d7` 0.5px hairlines — emulating the apple.com aesthetic. **No gradients (except subtle hero glows), no glassmorphism, no particle effects.** Light mode is the default; a `theme-toggle` switch flips the whole palette into an Apple-style dark theme via a single `dark` class (FOUC-free, applied before paint in `layout.tsx`).
 
 Deployed to **Vercel** with a **Neon Postgres** database. Project data and the admin user are managed entirely through the app's admin dashboard.
 
@@ -32,7 +32,7 @@ Deployed to **Vercel** with a **Neon Postgres** database. Project data and the a
 ├── prisma/
 │   ├── schema.prisma          # PostgreSQL schema (production)
 │   ├── schema.sqlite.prisma   # Identical models for local SQLite dev
-│   ├── seed.ts                # 3 realistic seed projects + admin user
+│   ├── seed.ts                # 6 realistic seed projects + admin user
 │   └── dev.db                 # Local SQLite database (gitignored)
 ├── public/
 │   └── favicon.svg            # SVG favicon fallback (Apple "C" monogram)
@@ -129,7 +129,7 @@ Set `DATABASE_URL`/`NEXTAUTH_SECRET`/`NEXTAUTH_URL`, and the contact-mail vars
 
 ```bash
 npm run db:push     # prisma db push (uses prisma/schema.prisma)
-npm run db:seed     # seeds 3 projects + admin user
+npm run db:seed     # seeds 6 projects + admin user
 ```
 
 ### 4. Local dev with SQLite (no Postgres needed)
@@ -157,6 +157,9 @@ Open http://localhost:3000
 
 - Local login: http://localhost:3000/admin
 - Default credentials (from seed): `admin@portfolio.dev` / `firas228`
+
+Credentials are **hardcoded in `prisma/seed.ts`** — the `ADMIN_EMAIL` /
+`ADMIN_PASSWORD` vars in `.env.example` are not read anywhere.
 
 **Change the password immediately** after first login.
 
@@ -189,7 +192,10 @@ white — crisp in both dark and light browser tabs. The SVG is linked in
 
 The form at `/contact` posts to `/api/contact` → **Resend** if
 `RESEND_API_KEY` is set, otherwise **Nodemailer** via `SMTP_*`. Zod validation
-on both client and server.
+on both client and server. Submissions are **always persisted to the admin
+inbox** even when no mail provider is configured; email dispatch is best-effort
+after save. The route is rate-limited to 5 requests / 10 minutes per visitor
+(`src/lib/rate-limit.ts`).
 
 ## Responsive & Mobile Guidelines (Section VI)
 
@@ -244,3 +250,81 @@ Allowed: scroll-reveal (0.6s ease-out fade-up), `scale(1.02)` on button hover /
 image hover, background-color/interaction transitions, and the carousel's drag
 physics. `prefers-reduced-motion` is respected throughout via `reveal.tsx` and
 `globals.css`.
+
+## For AI Agents (AGENTS.md)
+
+### Dev workflow
+
+Local dev runs on **SQLite**; production deploys to Vercel with **Neon Postgres**.
+
+```bash
+npm run db:sqlite:setup   # generate client + push schema.sqlite.prisma (wipes dev.db)
+npm run db:sqlite:seed    # seed 6 projects + admin user
+DATABASE_URL="file:./dev.db" npm run dev
+```
+
+`db:sqlite:setup` runs `--force-reset`, so it **wipes the local DB** every run.
+`seed` then fully rebuilds it — and seed is **pruning, not additive**: it deletes
+any `Project` whose slug is not in the seed set, so manual local edits to seeded
+rows are lost on re-seed. Both are by design: the local DB is fully seed-derived.
+
+Verify with `npm run lint` and `npm run build` (what CI runs in `webpack.yml`;
+Node 22, `npm ci`). `npx tsc --noEmit` also passes (`noEmit: true` in tsconfig)
+but is **not part of CI**. There is **no test suite**.
+
+### Two Prisma schemas (the gotcha)
+
+`schema.prisma` (Postgres) and `schema.sqlite.prisma` (SQLite) are **identical
+except the `provider` field**. Any schema change must be made to **both**, and
+the local client regenerated via the SQLite setup script. Same for seed data.
+`DATABASE_URL="file:./dev.db"` resolves relative to the schema file, so the local
+db lives at `prisma/dev.db`.
+
+### Data model
+
+- **User** — the single admin; `password` is a bcrypt hash. Created by `seed.ts`
+  with **hardcoded** creds `admin@portfolio.dev` / the password `firas228` — the
+  `ADMIN_EMAIL`/`ADMIN_PASSWORD` vars in `.env.example` are **unused**.
+- **Project** — `slug` unique; `tags` is a **JSON string** (default `"[]"`,
+  stringify on write via `JSON.stringify`, parse with `parseTags`/`JSON.parse` in
+  `src/lib/utils.ts`); `featured` drives homepage placement. Admin CRUD validates
+  `slug` as lowercase-alphanumeric-with-dashes server-side.
+- **Message** — contact-form submissions, always persisted to the DB (admin
+  inbox); email dispatch is best-effort after save (Resend if `RESEND_API_KEY`,
+  else Nodemailer via `SMTP_*`). Contact route is rate-limited
+  (5 req / 10 min, `src/lib/rate-limit.ts`).
+
+GitHub sync (`npm run sync:github`) pulls calap0309's public repos, filters via
+`shouldInclude`, and upserts by slug; it deletes stale projects unless run with
+`--keep-manual`. Mapping logic (cover images, tag overrides, featured set,
+exclusions, GitHub Pages fallbacks) lives in `src/lib/github-projects.ts`, the
+single source shared by the script and the API route. CI runs this **daily at
+03:00 UTC** (`sync-github.yml`, needs `DATABASE_URL` + `GITHUB_TOKEN` secrets),
+so running it locally is for previewing, not production.
+
+### Design system
+
+All tokens are CSS variables in `globals.css` (RGB triplets, `light` default +
+`.dark` override toggled by `theme-toggle.tsx`, applied FOUC-free by an inline
+`<head>` script in `layout.tsx`) exposed as Tailwind classes: `bg-appbg`,
+`text-ink`, `text-subtext`, `bg-accent` / `accent-hover`, `border-hairline`,
+`text-danger`, `surface` / `surface-soft` / `surface-tag`.
+
+- Type scale lives in `tailwind.config.ts` (`fontSize.*`, `tracking-apple`); keep text fluid with `clamp()` and never below 16px on mobile.
+- No gradients except the hero glow (`--topwash`), no glassmorphism.
+- `components/reveal.tsx` handles scroll reveals and respects `prefers-reduced-motion`; keep that respect in any new animation (`magnetic-button.tsx`, `tilt-card.tsx` check it too).
+- `max-w-text` (980px) for copy, `max-w-grid` (1200px) for project grids.
+
+### Conventions
+
+- Server components by default; add `"use client"` only when interactivity requires it.
+- Components co-located under `src/components/`; logic under `src/lib/`.
+- Forms use react-hook-form + zod (client **and** server validation).
+- Every admin API route validates the NextAuth session server-side before mutating (`getServerSession(authOptions)` from `src/lib/auth.ts`).
+
+### Env
+
+`.env.example` is the source of truth for required vars (Postgres URL for prod,
+NextAuth secret/URL, Resend or SMTP for the contact form). Local overrides go in
+`.env.local`; never commit `.env` files. Note `ADMIN_EMAIL`/`ADMIN_PASSWORD` are
+listed there but read nowhere (see Data model).
