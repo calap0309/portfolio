@@ -156,12 +156,15 @@ Open http://localhost:3000
 ## Admin
 
 - Local login: http://localhost:3000/admin
-- Default credentials (from seed): `admin@portfolio.dev` / `firas228`
+- Email: `ADMIN_EMAIL` (default `admin@portfolio.dev`)
+- Password: set via the `ADMIN_PASSWORD` environment variable — required by
+  `npm run db:seed` and `npm run sync:github` (they fail if it is empty).
 
-Credentials are **hardcoded in `prisma/seed.ts`** — the `ADMIN_EMAIL` /
-`ADMIN_PASSWORD` vars in `.env.example` are not read anywhere.
+The password is **never hardcoded or committed**; it is read from the
+`ADMIN_PASSWORD` env var in `prisma/seed.ts` and `scripts/sync-github.ts`.
+If you need to rotate it, update `ADMIN_PASSWORD` and re-seed.
 
-**Change the password immediately** after first login.
+**Change the password if it was ever exposed publicly.**
 
 ## Projects Carousel (Section III)
 
@@ -283,8 +286,8 @@ db lives at `prisma/dev.db`.
 ### Data model
 
 - **User** — the single admin; `password` is a bcrypt hash. Created by `seed.ts`
-  with **hardcoded** creds `admin@portfolio.dev` / the password `firas228` — the
-  `ADMIN_EMAIL`/`ADMIN_PASSWORD` vars in `.env.example` are **unused**.
+  with the email `ADMIN_EMAIL` (default `admin@portfolio.dev`) and the password
+  from the required `ADMIN_PASSWORD` env var — it is **never hardcoded**.
 - **Project** — `slug` unique; `tags` is a **JSON string** (default `"[]"`,
   stringify on write via `JSON.stringify`, parse with `parseTags`/`JSON.parse` in
   `src/lib/utils.ts`); `featured` drives homepage placement. Admin CRUD validates
@@ -326,5 +329,5 @@ All tokens are CSS variables in `globals.css` (RGB triplets, `light` default +
 
 `.env.example` is the source of truth for required vars (Postgres URL for prod,
 NextAuth secret/URL, Resend or SMTP for the contact form). Local overrides go in
-`.env.local`; never commit `.env` files. Note `ADMIN_EMAIL`/`ADMIN_PASSWORD` are
-listed there but read nowhere (see Data model).
+`.env.local`; never commit `.env` files. `ADMIN_PASSWORD` is **required** for
+`npm run db:seed` and `npm run sync:github` (used in seed/sync, see Data model).
