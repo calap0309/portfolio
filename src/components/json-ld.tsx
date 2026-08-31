@@ -3,7 +3,7 @@
  * Helps Google show rich results; injected as <script type="application/ld+json">.
  */
 export function JsonLd() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://portfolio-calap.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://portfolio-six-topaz-evd842wqk8.vercel.app";
   const person = {
     "@context": "https://schema.org",
     "@type": "Person",

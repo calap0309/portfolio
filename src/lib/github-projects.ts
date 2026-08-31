@@ -14,6 +14,7 @@ export type GhRepo = {
   topics?: string[];
   fork: boolean;
   private: boolean;
+  size: number;
   updated_at: string;
 };
 
@@ -68,8 +69,17 @@ export function tagsFor(repo: GhRepo): string[] {
 export function shouldInclude(repo: GhRepo): boolean {
   if (repo.fork || repo.private) return false;
   if (EXCLUDE.has(repo.name)) return false;
-  // keep only repos with a description or known cover (avoid empty forks)
-  return true;
+  // Keep only repos worth showing: one that has a real description, an
+  // explicit curated cover, or a live homepage. Additionally drop truly empty
+  // repos (GitHub reports size 0) even if they carry a placeholder description
+  // (e.g. a bare test repo like "fgfggd") — those would otherwise appear with
+  // a generic filler description.
+  const isEmpty = repo.size === 0;
+  const hasCuratedCover = Object.prototype.hasOwnProperty.call(COVERS, repo.name);
+  if (isEmpty && !hasCuratedCover) return false;
+  const hasDescription = Boolean(repo.description?.trim());
+  const hasHomepage = Boolean(repo.homepage?.trim());
+  return hasDescription || hasCuratedCover || hasHomepage;
 }
 
 export type MappedProject = {

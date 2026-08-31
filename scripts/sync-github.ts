@@ -35,15 +35,20 @@ async function main() {
 
   const prisma = new PrismaClient();
 
-  // ensure admin user exists for FK
-  const adminEmail = "admin@portfolio.dev";
+  // ensure admin user exists for FK. To avoid auto-creating an account with a
+  // publicly-known password, we require the admin to already exist (from seed).
+  const adminEmail = process.env.ADMIN_EMAIL || "admin@portfolio.dev";
   let user = await prisma.user.findUnique({ where: { email: adminEmail } });
   if (!user) {
-    // create lightweight admin if seed never ran
-    const bcrypt = await import("bcryptjs");
-    const hash = await bcrypt.hash("firas228", 12);
-    user = await prisma.user.create({ data: { email: adminEmail, name: "Admin", password: hash } });
-    console.log(`  created missing user ${adminEmail}`);
+    // Fall back to any existing user (e.g. a seed admin with a different email).
+    user = await prisma.user.findFirst();
+  }
+  if (!user) {
+    console.error(
+      "No admin user found. Run `npm run db:seed` with ADMIN_PASSWORD set first, then retry sync."
+    );
+    await prisma.$disconnect();
+    process.exit(1);
   }
 
   let upserted = 0;

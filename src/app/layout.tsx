@@ -4,7 +4,7 @@ import { Background } from "./background";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { JsonLd } from "@/components/json-ld";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://portfolio-calap.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://portfolio-six-topaz-evd842wqk8.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
